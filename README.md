@@ -1,2 +1,2 @@
 # FL_craftcms_2026
-Photographers webapp with ccCraft CMS
+Photographers webapp with Craft CMS
