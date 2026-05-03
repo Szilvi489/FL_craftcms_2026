@@ -1,4 +1,4 @@
-dateModified: 1777458966
+dateModified: 1777656258
 email:
   fromEmail: mail@szilviavarga.eu
   fromName: fl_craftcms_2026
@@ -7,6 +7,23 @@ meta:
   __names__:
     24c4f75f-97a9-4865-98c0-039bb57b8b32: fl_craftcms_2026 # fl_craftcms_2026
     295a13d8-58ef-46ad-ac11-6bd8a6702105: fl_craftcms_2026 # fl_craftcms_2026
+plugins:
+  contact-form:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  seo:
+    edition: standard
+    enabled: true
+    schemaVersion: 3.2.0
+  simple-mailchimp:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  stripe:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.2.0
 system:
   edition: solo
   live: true
