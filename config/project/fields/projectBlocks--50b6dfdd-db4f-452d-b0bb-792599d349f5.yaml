@@ -1,0 +1,25 @@
+columnSuffix: null
+handle: projectBlocks
+instructions: 'Build the project page with text and image blocks. Drag blocks to change order; image blocks include size and placement controls.'
+name: 'Project Blocks'
+searchable: false
+settings:
+  createButtonLabel: 'Add block'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      uid: 93655f07-3272-4c7f-9e15-9c554bde1854 # Text
+    -
+      uid: 34b68727-d9fc-4be6-92a4-6433fc5e77ad # Image
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: null
+  propagationKeyFormat: null
+  propagationMethod: all
+  showCardsInGrid: false
+  viewMode: blocks
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

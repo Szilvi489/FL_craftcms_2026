@@ -1,0 +1,52 @@
+{% extends "_layouts/main.twig" %}
+
+{% block content %}
+<article class="project">
+  <header class="project-intro">
+    <h1>{{ entry.title }}</h1>
+
+    {% if entry.projectType or entry.client %}
+      <p class="project-meta">
+        {{ [entry.projectType, entry.client]|filter|join(' / ') }}
+      </p>
+    {% endif %}
+
+    {% if entry.description %}
+      <div class="project-description">
+        {{ entry.description|nl2br }}
+      </div>
+    {% endif %}
+
+    {% if entry.externalLink %}
+      <a class="project-link" href="{{ entry.externalLink }}" rel="noopener" target="_blank">Full story</a>
+    {% endif %}
+
+    <a class="back-link" href="/projects">back</a>
+  </header>
+
+  <div class="project-blocks">
+    {% for block in entry.projectBlocks.all() %}
+      {% set blockType = block.type.handle ?? block.type %}
+
+      {% if blockType == 'textBlock' %}
+        <div class="text-block">
+          {{ block.blockText|nl2br }}
+        </div>
+      {% elseif blockType == 'imageBlock' %}
+        {% set image = block.blockImage.one() %}
+        {% set size = block.imageSize.value ?? block.imageSize ?? 'medium' %}
+        {% set placement = block.imagePlacement.value ?? block.imagePlacement ?? 'center' %}
+
+        {% if image %}
+          <figure class="image-block image-block--{{ size }} image-block--{{ placement }}">
+            <img src="{{ image.url }}" alt="{{ image.alt ?: block.caption ?: entry.title }}" loading="lazy">
+            {% if block.caption %}
+              <figcaption>{{ block.caption|nl2br }}</figcaption>
+            {% endif %}
+          </figure>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,156 @@
+allowLineBreaksInTitles: true
+color: blue
+description: 'Each individual photo project'
+fieldLayouts:
+  b97b4916-4bed-46fc-85fb-d3c33f24d434:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2026-05-04T12:11:13+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 6024b090-ad02-4f35-bd63-b43405ce6867
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: a4767100-10cc-4b48-87bd-2246e9965fd8 # Project Type
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 37f72054-248d-4cbb-a615-564a9df0f536
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 0776be5d-4a08-4d09-8fa6-976025b42e0f # Client
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: fba8a2dc-178b-4490-9d1a-945c6730b393
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: b9f5d63d-5ae1-4950-a8d4-09042187d7fc # Description
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 080fa55d-58c8-4051-b306-0b9de23f606d
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: ebc14517-892e-49e0-bb3d-cb2762d2df8f # External Link
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 47f86f07-9542-4abd-87cf-ee6e99f548d0
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 4d45c449-648c-43d4-b7c2-0dc057e89950 # Hero Image
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: true
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5b6c5723-4660-48d8-88c9-42049921d752
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 50b6dfdd-db4f-452d-b0bb-792599d349f5 # Project Blocks
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e4f761ee-446a-4662-b18a-dd3005f2dd0a
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 521d813e-498e-4cda-8a36-a436f391e335
+        userCondition: null
+    thumbFieldKey: 'layoutElement:5b6c5723-4660-48d8-88c9-42049921d752'
+handle: project
+hasTitleField: true
+icon: circle-camera
+name: Project
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

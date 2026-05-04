@@ -1,0 +1,12 @@
+altTranslationKeyFormat: null
+altTranslationMethod: none
+fieldLayouts: null
+fs: projectMedia
+handle: projectMedia
+name: 'Project Media'
+sortOrder: 1
+subpath: ''
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+transformFs: projectMedia
+transformSubpath: transforms
