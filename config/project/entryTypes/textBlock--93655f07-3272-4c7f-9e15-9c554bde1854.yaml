@@ -1,0 +1,43 @@
+allowLineBreaksInTitles: false
+color: null
+description: 'Text block for project pages'
+fieldLayouts:
+  6dd312eb-8e2a-48d6-a23d-93dbdfbf743e:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 8d8e6f92-d122-47c2-b662-e62fc423eeb4 # Text
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 510d4217-87e5-4b97-9acd-d6eba3b56d9b
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 39358d61-8448-4758-873b-208d05ce19d8
+        userCondition: null
+    thumbFieldKey: null
+handle: textBlock
+hasTitleField: false
+icon: align-left
+name: Text
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: Text
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: Text

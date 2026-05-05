@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ craft.app.language }}">
+<head>
+    <meta charset="utf-8">
+    <title>{% if entry is defined %}{{ entry.title }} - {% endif %}{{ siteName }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base/variables.css">
+    <link rel="stylesheet" href="/css/base/reset.css">
+    <link rel="stylesheet" href="/css/base/base.css">
+    <link rel="stylesheet" href="/css/base/typography.css">
+    <link rel="stylesheet" href="/css/nav/nav.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <a class="site-home-link" href="/" aria-label="Home">FL</a>
+    {% include "_components/shared/nav/nav.twig" %}
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="/js/scripts.js"></script>
+    <script src="/js/nav.js?v=4"></script>
+</body>
+</html>

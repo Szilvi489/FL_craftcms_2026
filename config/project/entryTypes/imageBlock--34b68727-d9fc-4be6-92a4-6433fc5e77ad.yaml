@@ -1,0 +1,94 @@
+allowLineBreaksInTitles: false
+color: null
+description: 'Image block with size and placement controls'
+fieldLayouts:
+  e372e275-946b-4cef-a9be-eb310357b155:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 89eecf69-1f6b-495c-b671-4d59025672df # Image
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: true
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2985b1f8-a67e-4d48-bde8-7e574be2f138
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: e0967947-c575-468b-a978-14260dcaf746 # Image Size
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e0f0cab3-555a-4193-8960-a84ed6303a4e
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 042ec6e4-cb40-4199-a50d-c9f6d034781e # Image Placement
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f2880035-5546-4965-8ce3-75a74be57c88
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-05-04T12:00:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 0c9a682e-74b0-41d6-9634-3425aa21eeb0 # Caption
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0f5f26c3-0700-4f6e-8c21-7aa4bd97388a
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: e9e5b780-aef0-4cf8-9f8e-cb9e43c1d577
+        userCondition: null
+    thumbFieldKey: 'layoutElement:2985b1f8-a67e-4d48-bde8-7e574be2f138'
+handle: imageBlock
+hasTitleField: false
+icon: image
+name: Image
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: Image
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: Image

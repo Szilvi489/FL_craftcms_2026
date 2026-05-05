@@ -1,0 +1,49 @@
+<nav class="site-nav" aria-label="Primary">
+  <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+    <span class="site-nav__label" data-open-label="X" data-closed-label="MENU">MENU</span>
+  </button>
+
+  <div class="site-nav__panel" id="site-menu" hidden>
+    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--projects" aria-hidden="true">
+      {% for i in 1..10 %}
+        <span>PROJECTSPROJECTSPROJECTSPROJECTSPROJECTS</span>
+      {% endfor %}
+    </div>
+
+    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--info" aria-hidden="true">
+      {% for i in 1..10 %}
+        <span>INFOINFOINFOINFOINFOINFOINFOINFOINFOINFO</span>
+      {% endfor %}
+    </div>
+
+    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--about" aria-hidden="true">
+      {% for i in 1..10 %}
+        <span>ABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUT</span>
+      {% endfor %}
+    </div>
+
+    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--contact" aria-hidden="true">
+      {% for i in 1..10 %}
+        <span>CONTACTCONTACTCONTACTCONTACTCONTACTCONTACT</span>
+      {% endfor %}
+    </div>
+
+    <div class="site-nav__inner">
+      <div class="site-nav__item">
+        <a href="/projects">Projects</a>
+      </div>
+
+      <div class="site-nav__item">
+        <a href="/info">Info</a>
+      </div>
+
+      <div class="site-nav__item">
+        <a href="/about">About</a>
+      </div>
+
+      <div class="site-nav__item">
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>

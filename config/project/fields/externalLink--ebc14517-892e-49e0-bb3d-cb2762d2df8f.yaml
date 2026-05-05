@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: externalLink
+instructions: 'Optional external story or campaign URL.'
+name: 'External Link'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  initialRows: 1
+  multiline: false
+  placeholder: 'https://'
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

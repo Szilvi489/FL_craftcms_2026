@@ -1,0 +1,35 @@
+{% extends "_layouts/main.twig" %}
+
+{% block content %}
+{% set projects = craft.entries.section('projects').orderBy('lft asc').all() %}
+
+<section class="projects-index">
+  <div class="project-list" aria-label="Projects">
+    {% for project in projects %}
+      <a class="project-row" href="/{{ project.uri }}">
+        <span>{{ project.title }}</span>
+        <span>{{ project.projectType ?: '' }}</span>
+        <span>{{ project.client ?: '' }}</span>
+      </a>
+    {% else %}
+      <p>No projects have been added yet.</p>
+    {% endfor %}
+  </div>
+
+  <div class="project-preview-grid" aria-label="Project previews">
+    {% for project in projects %}
+      {% set image = project.heroImage.one() %}
+      {% if not image and project.projectBlocks is defined %}
+        {% set firstImageBlock = project.projectBlocks.type('imageBlock').one() %}
+        {% set image = firstImageBlock ? firstImageBlock.blockImage.one() : null %}
+      {% endif %}
+
+      {% if image %}
+        <a class="project-preview" href="/{{ project.uri }}" aria-label="{{ project.title }}">
+          <img src="{{ image.url }}" alt="{{ image.alt ?: project.title }}" loading="lazy">
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
