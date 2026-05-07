@@ -74,7 +74,7 @@ fieldLayouts:
             dateAdded: '2026-05-04T12:00:00+00:00'
             editCondition: null
             elementCondition: null
-            fieldUid: b9f5d63d-5ae1-4950-a8d4-09042187d7fc # Description
+            fieldUid: b9f5d63d-5ae1-4950-a8d4-09042187d7fc
             handle: null
             includeInCards: false
             instructions: null
@@ -91,7 +91,7 @@ fieldLayouts:
             dateAdded: '2026-05-04T12:00:00+00:00'
             editCondition: null
             elementCondition: null
-            fieldUid: ebc14517-892e-49e0-bb3d-cb2762d2df8f # External Link
+            fieldUid: ebc14517-892e-49e0-bb3d-cb2762d2df8f
             handle: null
             includeInCards: false
             instructions: null

@@ -1,49 +1,52 @@
-<nav class="site-nav" aria-label="Primary">
-  <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-menu">
-    <span class="site-nav__label" data-open-label="X" data-closed-label="MENU">MENU</span>
+<nav class="site-nav site-nav--behavior-{{ navBehavior|default('static') }}" aria-label="Primary">
+  <a class="site-nav__link" href="/projects">Index</a>
+  <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-info-panel">
+    Info
   </button>
-
-  <div class="site-nav__panel" id="site-menu" hidden>
-    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--projects" aria-hidden="true">
-      {% for i in 1..10 %}
-        <span>PROJECTSPROJECTSPROJECTSPROJECTSPROJECTS</span>
-      {% endfor %}
-    </div>
-
-    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--info" aria-hidden="true">
-      {% for i in 1..10 %}
-        <span>INFOINFOINFOINFOINFOINFOINFOINFOINFOINFO</span>
-      {% endfor %}
-    </div>
-
-    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--about" aria-hidden="true">
-      {% for i in 1..10 %}
-        <span>ABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUT</span>
-      {% endfor %}
-    </div>
-
-    <div class="site-nav__hover-kinetic site-nav__hover-kinetic--contact" aria-hidden="true">
-      {% for i in 1..10 %}
-        <span>CONTACTCONTACTCONTACTCONTACTCONTACTCONTACT</span>
-      {% endfor %}
-    </div>
-
-    <div class="site-nav__inner">
-      <div class="site-nav__item">
-        <a href="/projects">Projects</a>
-      </div>
-
-      <div class="site-nav__item">
-        <a href="/info">Info</a>
-      </div>
-
-      <div class="site-nav__item">
-        <a href="/about">About</a>
-      </div>
-
-      <div class="site-nav__item">
-        <a href="/contact">Contact</a>
-      </div>
-    </div>
+  <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-contact-panel">
+    Contact
+  </button>
+  <a class="site-home-link site-nav__link" href="/" aria-label="Home">FL</a>
+  <div class="site-nav__legal">
+    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-imprint-panel">
+      Imprint
+    </button>
+    <p>/</p>
+    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-privacy-panel">
+      Privacy
+    </button>
   </div>
+  <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-contact-panel">
+    Shop
+  </button>
 </nav>
+
+<section class="site-info-panel" id="site-info-panel" aria-hidden="true">
+  <div class="site-info-panel__inner">
+    {% include "_components/info.twig" %}
+  </div>
+</section>
+
+<section class="site-contact-panel" id="site-contact-panel" aria-hidden="true">
+  <div class="site-contact-panel__inner">
+    {% include "_components/contact.twig" %}
+  </div>
+</section>
+
+<section class="site-imprint-panel" id="site-imprint-panel" aria-hidden="true">
+  <div class="site-imprint-panel__inner">
+    {% include "_components/imprint.twig" %}
+  </div>
+</section>
+
+<section class="site-privacy-panel" id="site-privacy-panel" aria-hidden="true">
+  <div class="site-privacy-panel__inner">
+    {% include "_components/privacy.twig" %}
+  </div>
+</section>
+
+<section class="site-shop-panel" id="site-shop-panel" aria-hidden="true">
+  <div class="site-shop-panel__inner">
+    {% include "_components/shop.twig" %}
+  </div>
+</section>

@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: coverHoleSizeWidth
+instructions: 'Size of the square hole. Use a CSS value like 18vw, 16rem, 240px, or 30%.'
+name: 'Cover Hole Size Width'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: true
+  initialRows: 1
+  multiline: false
+  placeholder: 18vw
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

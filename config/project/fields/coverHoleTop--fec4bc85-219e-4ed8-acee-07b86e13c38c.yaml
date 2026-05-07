@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: coverHoleTop
+instructions: 'Top offset for the square hole. Use a CSS value like 12vh, 8rem, 120px, or 20%.'
+name: 'Cover Hole Top'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: true
+  initialRows: 1
+  multiline: false
+  placeholder: 12vh
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

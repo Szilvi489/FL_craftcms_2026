@@ -1,0 +1,112 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  56a548a4-f89d-48ad-a8b7-5a92066b456c:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-06T18:56:38+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: aa1e8ce0-05c5-457a-9768-f8464c977732 # Index Image
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: c1a6ab41-408d-40c5-a6ad-0c5a86f7ec11
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-06T18:58:06+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e58ed5ee-9d27-4e11-9395-1c321b34a1b8
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2e8d6d29-613f-4e11-9566-b2e72f34c1ff
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: e76d019b-9979-4604-b3bf-0d5227d43421
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-06T18:56:38+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: fec4bc85-219e-4ed8-acee-07b86e13c38c # Cover Hole Top
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 77058824-1ef5-42e2-85e0-ef2c8c6ad5b1
+            userCondition: null
+            warning: null
+            width: 33
+          -
+            dateAdded: '2026-05-06T18:56:38+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: d529b2cf-5512-4ec4-a991-d60c5ed92320 # Cover Hole Left
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e495f393-0fbf-4be6-a1ef-f10db01dfd26
+            userCondition: null
+            warning: null
+            width: 33
+          -
+            dateAdded: '2026-05-06T18:56:38+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 907201b9-f1de-459d-b84e-382b577392fa # Cover Hole Size Width
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 443cad3e-f0ad-467f-8a7d-d26997f59fe9
+            userCondition: null
+            warning: null
+            width: 34
+        name: 'Cover Hole Parameters'
+        uid: fdd2eb2f-4347-4529-a160-af1e0ee72fdb
+        userCondition: null
+    thumbFieldKey: null
+handle: homepage
+hasTitleField: false
+icon: null
+name: Homepage
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: Homepage
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

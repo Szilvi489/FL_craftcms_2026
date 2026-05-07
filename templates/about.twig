@@ -1,13 +1,15 @@
 {% extends "_layouts/main.twig" %}
 
+{% block title %}Imprint / Privacy - {{ siteName }}{% endblock %}
+
 {% block content %}
 <section class="info-page">
   <div class="info-page__intro">
-    <h1>About</h1>
+    <h1>Imprint / Privacy</h1>
   </div>
 
   <div class="info-page__content">
-    <p>About text can go here.</p>
+    {% include "_components/imprint-privacy.twig" %}
   </div>
 </section>
 {% endblock %}

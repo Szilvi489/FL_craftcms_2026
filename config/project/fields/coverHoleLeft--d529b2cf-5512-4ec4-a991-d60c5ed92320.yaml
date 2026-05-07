@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: coverHoleLeft
+instructions: 'Left offset for the square hole. Use a CSS value like 55vw, 8rem, 120px, or 20%.'
+name: 'Cover Hole Left'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: true
+  initialRows: 1
+  multiline: false
+  placeholder: 55vw
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

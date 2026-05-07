@@ -1,4 +1,4 @@
-dateModified: 1777899811
+dateModified: 1778098786
 email:
   fromEmail: mail@szilviavarga.eu
   fromName: fl_craftcms_2026
@@ -14,25 +14,31 @@ fs:
 meta:
   __names__:
     0c9a682e-74b0-41d6-9634-3425aa21eeb0: Caption # Caption
+    3c40c666-6a3f-4248-9cde-d3f7895e503c: Homepage # Homepage
     4d45c449-648c-43d4-b7c2-0dc057e89950: 'Hero Image' # Hero Image
     8d8e6f92-d122-47c2-b662-e62fc423eeb4: Text # Text
     24c4f75f-97a9-4865-98c0-039bb57b8b32: fl_craftcms_2026 # fl_craftcms_2026
     34b68727-d9fc-4be6-92a4-6433fc5e77ad: Image # Image
     042ec6e4-cb40-4199-a50d-c9f6d034781e: 'Image Placement' # Image Placement
     50b6dfdd-db4f-452d-b0bb-792599d349f5: 'Project Blocks' # Project Blocks
+    84af7e31-2c0a-418e-821b-30fca09c491b: Homepage # Homepage
     89eecf69-1f6b-495c-b671-4d59025672df: Image # Image
     295a13d8-58ef-46ad-ac11-6bd8a6702105: fl_craftcms_2026 # fl_craftcms_2026
     0776be5d-4a08-4d09-8fa6-976025b42e0f: Client # Client
     93655f07-3272-4c7f-9e15-9c554bde1854: Text # Text
+    907201b9-f1de-459d-b84e-382b577392fa: 'Cover Hole Size Width' # Cover Hole Size Width
     32674024-eef6-4b0e-b7d2-f656f0728272: Projects # Projects
     44545415-e00b-4ee8-8512-2ab38b23f0ff: Project # Project
     a8c5aee7-302b-47d7-a6f5-158cbebd8000: 'Public Schema' # Public Schema
     a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d: 'Project Media' # Project Media
     a4767100-10cc-4b48-87bd-2246e9965fd8: 'Project Type' # Project Type
+    aa1e8ce0-05c5-457a-9768-f8464c977732: 'Index Image' # Index Image
     b9f5d63d-5ae1-495c-8d4a-09042187d7fc: Description # Description
     cfe20cb2-f984-4ccd-8bd1-7ac5d198fe59: Project # Project
+    d529b2cf-5512-4ec4-a991-d60c5ed92320: 'Cover Hole Left' # Cover Hole Left
     e0967947-c575-468b-a978-14260dcaf746: 'Image Size' # Image Size
     ebc14517-892e-49d1-8922-4b4b73dc1: 'External Link' # External Link
+    fec4bc85-219e-4ed8-acee-07b86e13c38c: 'Cover Hole Top' # Cover Hole Top
 plugins:
   contact-form:
     edition: standard

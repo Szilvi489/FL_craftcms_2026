@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="{{ craft.app.language }}">
+{% set pageBodyClass %}{% block bodyClass %}{% endblock %}{% endset %}
+{% set navBehavior %}{% block navBehavior %}static{% endblock %}{% endset %}
 <head>
     <meta charset="utf-8">
-    <title>{% if entry is defined %}{{ entry.title }} - {% endif %}{{ siteName }}</title>
+    <title>{% block title %}{{ siteName }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/base/variables.css">
     <link rel="stylesheet" href="/css/base/reset.css">
     <link rel="stylesheet" href="/css/base/base.css">
     <link rel="stylesheet" href="/css/base/typography.css">
-    <link rel="stylesheet" href="/css/nav/nav.css">
+    <link rel="stylesheet" href="/css/nav/nav.css?v=18">
+    <link rel="stylesheet" href="/css/info.css?v=2">
+    <link rel="stylesheet" href="/css/contact.css?v=1">
+    <link rel="stylesheet" href="/css/imprint.css?v=1">
+    <link rel="stylesheet" href="/css/privacy.css?v=1">
     <link rel="stylesheet" href="/css/styles.css">
+    {% block pageStyles %}{% endblock %}
 </head>
-<body>
-    <a class="site-home-link" href="/" aria-label="Home">FL</a>
-    {% include "_components/shared/nav/nav.twig" %}
+<body class="{{ pageBodyClass|trim }}">
+    {% include "_components/shared/nav/nav.twig" with {
+      navBehavior: navBehavior|trim ?: 'static'
+    } %}
 
     <main class="site-main">
         {% block content %}{% endblock %}
     </main>
-    <script src="/js/scripts.js"></script>
-    <script src="/js/nav.js?v=4"></script>
+    <script src="/js/scripts.js?v=4"></script>
+    {% block pageScripts %}{% endblock %}
 </body>
 </html>

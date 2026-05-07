@@ -3,7 +3,7 @@ enabled: true
 handle: default
 hasUrls: true
 language: en
-name: fl_craftcms_2026
+name: 'Florian Lechner'
 primary: true
 siteGroup: 295a13d8-58ef-46ad-ac11-6bd8a6702105 # fl_craftcms_2026
 sortOrder: 1
