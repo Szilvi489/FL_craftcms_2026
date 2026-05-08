@@ -1,0 +1,32 @@
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-transition.is-active,
+html.has-page-transition-enter .page-transition {
+  opacity: 1;
+  visibility: visible;
+}
+
+.page-transition__window {
+  position: absolute;
+  top: var(--page-transition-hole-top, 12vh);
+  left: var(--page-transition-hole-left, 55vw);
+  width: var(--page-transition-hole-size, 18vw);
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: 0 0 0 100vmax #ffffff;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+html.has-page-transition-enter .site-nav {
+  opacity: 0;
+  translate: 0 -24px;
+}

@@ -1,24 +1,38 @@
-<nav class="site-nav site-nav--behavior-{{ navBehavior|default('static') }}" aria-label="Primary">
-  <a class="site-nav__link" href="/projects">Index</a>
-  <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-info-panel">
-    Info
-  </button>
-  <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-contact-panel">
-    Contact
-  </button>
-  <a class="site-home-link site-nav__link" href="/" aria-label="Home">FL</a>
-  <div class="site-nav__legal">
-    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-imprint-panel">
-      Imprint
+<nav class="site-nav site-nav--layout-{{ navLayout|default('full') }} site-nav--theme-{{ navTheme|default('black') }} site-nav--behavior-{{ navBehavior|default('static') }}" aria-label="Primary">
+  {% if navLayout|default('full') not in ['home-only', 'fl-fullscreen'] %}
+    <a class="site-nav__link" href="/index">Index</a>
+    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-info-panel">
+      Info
     </button>
-    <p>/</p>
-    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-privacy-panel">
-      Privacy
+    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-contact-panel">
+      Contact
     </button>
-  </div>
-  <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-contact-panel">
-    Shop
-  </button>
+  {% endif %}
+  <a class="site-home-link site-nav__link" href="{{ siteUrl }}#home-reveal" aria-label="Home">FL</a>
+  {% if navLayout|default('full') == 'fl-fullscreen' %}
+    <button class="site-nav__button site-fullscreen-toggle" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
+      <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.6"/>
+      </svg>
+    </button>
+  {% endif %}
+  {% if navLayout|default('full') not in ['home-only', 'fl-fullscreen'] %}
+  <a class="site-nav__link" href="/shop">Shop</a>
+        <button class="site-nav__button site-fullscreen-toggle site-fullscreen-toggle--inline" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
+        <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.6"/>
+        </svg>
+      </button>
+    <div class="site-nav__legal">
+      <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-imprint-panel">
+        Imprint
+      </button>
+      <span class="site-nav__separator" aria-hidden="true">/</span>
+      <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-privacy-panel">
+        Privacy
+      </button>
+    </div>
+  {% endif %}
 </nav>
 
 <section class="site-info-panel" id="site-info-panel" aria-hidden="true">
@@ -42,11 +56,5 @@
 <section class="site-privacy-panel" id="site-privacy-panel" aria-hidden="true">
   <div class="site-privacy-panel__inner">
     {% include "_components/privacy.twig" %}
-  </div>
-</section>
-
-<section class="site-shop-panel" id="site-shop-panel" aria-hidden="true">
-  <div class="site-shop-panel__inner">
-    {% include "_components/shop.twig" %}
   </div>
 </section>

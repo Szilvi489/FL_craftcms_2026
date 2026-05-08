@@ -1,6 +1,6 @@
 columnSuffix: null
 handle: indexImage
-instructions: 'Select the full-screen landing image for the homepage.'
+instructions: 'Select the full-screen landing image or MP4 video for the homepage.'
 name: 'Index Image'
 searchable: false
 settings:
@@ -9,6 +9,7 @@ settings:
   allowUploads: true
   allowedKinds:
     - image
+    - video
   branchLimit: null
   defaultPlacement: end
   defaultUploadLocationSource: 'volume:a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d' # Project Media
@@ -22,7 +23,7 @@ settings:
   restrictedDefaultUploadSubpath: null
   restrictedLocationSource: null
   restrictedLocationSubpath: null
-  selectionLabel: 'Add homepage image'
+  selectionLabel: 'Add homepage media'
   showSearchInput: true
   showSiteMenu: false
   showUnpermittedFiles: false

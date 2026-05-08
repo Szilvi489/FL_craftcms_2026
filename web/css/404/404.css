@@ -1,0 +1,51 @@
+.site-main {
+  padding: 0;
+}
+
+.not-found-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--color-bg);
+  isolation: isolate;
+}
+
+.not-found-page__media {
+  position: absolute;
+  inset: 0;
+}
+
+.not-found-page__media-item {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.not-found-page__media-item.is-active {
+  opacity: 1;
+}
+
+.not-found-page__cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.not-found-page__hole {
+  position: absolute;
+  top: var(--not-found-hole-top, 12vh);
+  left: var(--not-found-hole-left, 55vw);
+  width: var(--not-found-hole-size, 18vw);
+  aspect-ratio: 1;
+  background: transparent;
+  box-shadow: 0 0 0 100vmax #ffffff;
+}

@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: projectYear
+instructions: 'Add the year shown in the index page, for example 2024.'
+name: Year
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: 4
+  code: false
+  initialRows: 1
+  multiline: false
+  placeholder: '2026'
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

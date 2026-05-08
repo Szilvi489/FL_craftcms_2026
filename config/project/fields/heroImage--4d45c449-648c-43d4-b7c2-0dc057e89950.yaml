@@ -1,6 +1,6 @@
 columnSuffix: null
 handle: heroImage
-instructions: 'Optional image used as the project preview on the project index.'
+instructions: 'Optional image or MP4 video used as the project preview on the project index.'
 name: 'Hero Image'
 searchable: false
 settings:
@@ -9,6 +9,7 @@ settings:
   allowUploads: true
   allowedKinds:
     - image
+    - video
   branchLimit: null
   defaultPlacement: end
   defaultUploadLocationSource: 'volume:a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d' # Project Media
@@ -22,7 +23,7 @@ settings:
   restrictedDefaultUploadSubpath: ''
   restrictedLocationSource: null
   restrictedLocationSubpath: ''
-  selectionLabel: 'Add hero image'
+  selectionLabel: 'Add hero media'
   showSearchInput: true
   showSiteMenu: false
   showUnpermittedFiles: false

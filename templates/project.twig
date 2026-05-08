@@ -1,5 +1,7 @@
 {% extends "_layouts/main.twig" %}
 
+{% block navLayout %}fl-fullscreen{% endblock %}
+
 {% block content %}
 <article class="project">
   <header class="project-intro">
@@ -21,7 +23,7 @@
       <a class="project-link" href="{{ entry.externalLink }}" rel="noopener" target="_blank">Full story</a>
     {% endif %}
 
-    <a class="back-link" href="/projects">back</a>
+    <a class="back-link" href="/index">back</a>
   </header>
 
   <div class="project-blocks">
@@ -33,13 +35,25 @@
           {{ block.blockText|nl2br }}
         </div>
       {% elseif blockType == 'imageBlock' %}
-        {% set image = block.blockImage.one() %}
+        {% set media = block.blockImage.one() %}
         {% set size = block.imageSize.value ?? block.imageSize ?? 'medium' %}
         {% set placement = block.imagePlacement.value ?? block.imagePlacement ?? 'center' %}
 
-        {% if image %}
+        {% if media %}
           <figure class="image-block image-block--{{ size }} image-block--{{ placement }}">
-            <img src="{{ image.url }}" alt="{{ image.alt ?: block.caption ?: entry.title }}" loading="lazy">
+            {% if media.kind == 'video' %}
+              <video
+                src="{{ media.url }}"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label="{{ block.caption ?: entry.title }}"
+              ></video>
+            {% else %}
+              <img src="{{ media.url }}" alt="{{ media.alt ?: block.caption ?: entry.title }}" loading="lazy">
+            {% endif %}
             {% if block.caption %}
               <figcaption>{{ block.caption|nl2br }}</figcaption>
             {% endif %}

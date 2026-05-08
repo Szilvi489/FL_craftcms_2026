@@ -12,6 +12,7 @@ define('CRAFT_VENDOR_PATH', CRAFT_BASE_PATH . '/vendor');
 
 // Load Composer's autoloader
 require_once CRAFT_VENDOR_PATH . '/autoload.php';
+require_once CRAFT_BASE_PATH . '/src/web/SiteErrorHandler.php';
 
 // Load dotenv?
 if (class_exists(Dotenv\Dotenv::class)) {

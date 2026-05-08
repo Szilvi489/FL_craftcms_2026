@@ -52,7 +52,7 @@ fieldLayouts:
             uid: 37f72054-248d-4cbb-a615-564a9df0f536
             userCondition: null
             warning: null
-            width: 50
+            width: 34
           -
             dateAdded: '2026-05-04T12:00:00+00:00'
             editCondition: null
@@ -69,7 +69,24 @@ fieldLayouts:
             uid: fba8a2dc-178b-4490-9d1a-945c6730b393
             userCondition: null
             warning: null
-            width: 50
+            width: 33
+          -
+            dateAdded: '2026-05-07T11:55:00+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: d4442f70-1a78-46d9-baf3-739d429852e5 # Year
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 16247e39-c6d1-42a7-b5e2-12b752fda7eb
+            userCondition: null
+            warning: null
+            width: 33
           -
             dateAdded: '2026-05-04T12:00:00+00:00'
             editCondition: null

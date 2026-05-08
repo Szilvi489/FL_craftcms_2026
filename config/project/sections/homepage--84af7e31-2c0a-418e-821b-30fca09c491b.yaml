@@ -16,6 +16,6 @@ siteSettings:
   24c4f75f-97a9-4865-98c0-039bb57b8b32: # fl_craftcms_2026
     enabledByDefault: true
     hasUrls: true
-    template: index.twig
+    template: home.twig
     uriFormat: __home__
 type: single

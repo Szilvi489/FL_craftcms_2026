@@ -1,7 +1,99 @@
 (function() {
+  const fullscreenToggles = Array.from(document.querySelectorAll(".site-fullscreen-toggle"));
   const toggles = Array.from(document.querySelectorAll(".site-panel-toggle"));
+  const homeLink = document.querySelector(".site-home-link");
   const siteNav = document.querySelector(".site-nav");
+  const hasSharedPageTransition = Boolean(document.querySelector(".page-transition"));
+  const homeRevealStorageKey = "home-reveal-target";
   let originalNavTop = null;
+
+  const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const canEnterFullscreen = () => Boolean(
+    document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen
+  );
+  const canExitFullscreen = () => Boolean(
+    document.exitFullscreen || document.webkitExitFullscreen
+  );
+
+  const syncFullscreenButtons = () => {
+    if (!fullscreenToggles.length) {
+      return;
+    }
+
+    const isFullscreen = Boolean(fullscreenElement());
+
+    fullscreenToggles.forEach((toggle) => {
+      toggle.setAttribute("aria-pressed", isFullscreen ? "true" : "false");
+      toggle.setAttribute("aria-label", isFullscreen ? "Exit fullscreen" : "Enter fullscreen");
+      toggle.setAttribute("title", isFullscreen ? "Exit fullscreen" : "Enter fullscreen");
+    });
+  };
+
+  if (fullscreenToggles.length) {
+    if (!canEnterFullscreen()) {
+      fullscreenToggles.forEach((toggle) => {
+        toggle.hidden = true;
+      });
+    } else {
+      fullscreenToggles.forEach((toggle) => {
+        toggle.addEventListener("click", async () => {
+          try {
+            if (fullscreenElement()) {
+              if (document.exitFullscreen) {
+                await document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+              }
+            } else if (document.documentElement.requestFullscreen) {
+              await document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+              document.documentElement.webkitRequestFullscreen();
+            }
+          } catch (error) {
+            console.error("Fullscreen toggle failed", error);
+          } finally {
+            syncFullscreenButtons();
+          }
+        });
+      });
+
+      document.addEventListener("fullscreenchange", syncFullscreenButtons);
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButtons);
+      syncFullscreenButtons();
+    }
+  }
+
+  if (homeLink && !hasSharedPageTransition) {
+    const homePathname = new URL(homeLink.href).pathname;
+
+    if (window.location.pathname !== homePathname) {
+      homeLink.addEventListener("click", async (event) => {
+        try {
+          window.sessionStorage.setItem(homeRevealStorageKey, "1");
+        } catch (error) {
+          // Ignore storage failures and fall back to the hash-only behavior.
+        }
+
+        if (!fullscreenElement()) {
+          return;
+        }
+
+        event.preventDefault();
+
+        try {
+          if (document.exitFullscreen) {
+            await document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+        } catch (error) {
+          console.error("Exiting fullscreen before home navigation failed", error);
+        } finally {
+          window.location.href = homeLink.href;
+        }
+      });
+    }
+  }
 
   if (!toggles.length) {
     return;

@@ -1,0 +1,86 @@
+{% extends "_layouts/main.twig" %}
+
+{% set homeEntry = null %}
+{% if currentUser %}
+  {% set homeEntry = craft.entries()
+    .section('homepage')
+    .site(currentSite)
+    .status(null)
+    .draftOf(false)
+    .savedDraftsOnly()
+    .draftCreator(currentUser)
+    .orderBy('elements.dateUpdated DESC')
+    .one() %}
+{% endif %}
+{% if not homeEntry %}
+  {% set homeEntry = craft.entries().section('homepage').site(currentSite).one() %}
+{% endif %}
+
+{% block navLayout %}home-only{% endblock %}
+{% block title %}404 - {{ siteName }}{% endblock %}
+
+{% block pageStyles %}
+  <link rel="stylesheet" href="/css/404/404.css?v=2">
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/js/404/404Gallery.js?v=2"></script>
+{% endblock %}
+
+{% block content %}
+{% set coverHoleTop = homeEntry and homeEntry.coverHoleTop ? homeEntry.coverHoleTop : '12vh' %}
+{% set coverHoleLeft = homeEntry and homeEntry.coverHoleLeft ? homeEntry.coverHoleLeft : '55vw' %}
+{% set coverHoleSizeWidth = homeEntry and homeEntry.coverHoleSizeWidth ? homeEntry.coverHoleSizeWidth : '18vw' %}
+{% set projects = craft.entries().section('projects').orderBy('lft asc').all() %}
+{% set projectMedia = [] %}
+
+{% for project in projects %}
+  {% set media = project.heroImage.one() %}
+  {% if not media and project.projectBlocks is defined %}
+    {% set firstImageBlock = project.projectBlocks.type('imageBlock').one() %}
+    {% set media = firstImageBlock ? firstImageBlock.blockImage.one() : null %}
+  {% endif %}
+  {% if media %}
+    {% set projectMedia = projectMedia|merge([media]) %}
+  {% endif %}
+{% endfor %}
+
+<section
+  class="not-found-page{% if projectMedia|length %} not-found-page--has-media{% endif %}"
+  aria-label="Page not found"
+  style="--not-found-hole-top: {{ coverHoleTop|e('html_attr') }}; --not-found-hole-left: {{ coverHoleLeft|e('html_attr') }}; --not-found-hole-size: {{ coverHoleSizeWidth|e('html_attr') }};"
+>
+  {% if projectMedia|length %}
+    <div class="not-found-page__media" aria-hidden="true">
+      {% for media in projectMedia %}
+        {% if media.kind == 'video' %}
+          <video
+            class="not-found-page__media-item{% if loop.first %} is-active{% endif %}"
+            src="{{ media.url }}"
+            muted
+            loop
+            playsinline
+            preload="auto"
+          ></video>
+        {% else %}
+          <img
+            class="not-found-page__media-item{% if loop.first %} is-active{% endif %}"
+            src="{{ media.url }}"
+            alt=""
+            {% if loop.first %}
+              loading="eager"
+              fetchpriority="high"
+            {% else %}
+              loading="lazy"
+            {% endif %}
+          >
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="not-found-page__cover" aria-hidden="true">
+    <div class="not-found-page__hole"></div>
+  </div>
+</section>
+{% endblock %}

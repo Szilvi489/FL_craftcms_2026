@@ -1,0 +1,75 @@
+{% extends "_layouts/main.twig" %}
+
+{% set homeEntry = null %}
+{% if currentUser %}
+  {% set homeEntry = craft.entries()
+    .section('homepage')
+    .site(currentSite)
+    .status(null)
+    .draftOf(false)
+    .savedDraftsOnly()
+    .draftCreator(currentUser)
+    .orderBy('elements.dateUpdated DESC')
+    .one() %}
+{% endif %}
+{% if not homeEntry %}
+  {% set homeEntry = craft.entries().section('homepage').site(currentSite).one() %}
+{% endif %}
+
+{% block navTheme %}dynamic-inverse{% endblock %}
+{% block navBehavior %}home-reveal{% endblock %}
+
+{% block pageStyles %}
+  <link rel="stylesheet" href="/css/home/home.css?v=2">
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/js/vendor/ScrollTrigger.min.js"></script>
+  <script src="/js/home/homeHero.js?v=4"></script>
+{% endblock %}
+
+{% block content %}
+{% set homeMedia = homeEntry ? homeEntry.indexImage.one() : null %}
+{% set coverHoleTop = homeEntry and homeEntry.coverHoleTop ? homeEntry.coverHoleTop : '12vh' %}
+{% set coverHoleLeft = homeEntry and homeEntry.coverHoleLeft ? homeEntry.coverHoleLeft : '55vw' %}
+{% set coverHoleSizeWidth = homeEntry and homeEntry.coverHoleSizeWidth ? homeEntry.coverHoleSizeWidth : '18vw' %}
+
+<section
+  class="home-hero{% if homeMedia %} home-hero--has-media{% endif %}"
+  style="--home-cover-hole-top: {{ coverHoleTop|e('html_attr') }}; --home-cover-hole-left: {{ coverHoleLeft|e('html_attr') }}; --home-cover-hole-size: {{ coverHoleSizeWidth|e('html_attr') }};"
+>
+  {% if homeMedia %}
+    <div class="home-hero__media">
+      {% if homeMedia.kind == 'video' %}
+        <video
+          src="{{ homeMedia.url }}"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        ></video>
+      {% else %}
+        <img
+          src="{{ homeMedia.url }}"
+          alt="{{ homeMedia.title ?: siteName }}"
+          loading="eager"
+          fetchpriority="high"
+        >
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div
+    class="home-hero__cover"
+    aria-hidden="true"
+  >
+    <div class="home-hero__hole"></div>
+  </div>
+
+  <div class="intro-title">
+    <h1>{{ siteName }}</h1>
+    <h2>Photography</h2>
+  </div>
+</section>
+{% endblock %}

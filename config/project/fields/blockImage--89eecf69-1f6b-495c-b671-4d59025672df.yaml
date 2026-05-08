@@ -1,6 +1,6 @@
 columnSuffix: null
 handle: blockImage
-instructions: null
+instructions: 'Upload an image or MP4 video.'
 name: Image
 searchable: false
 settings:
@@ -9,6 +9,7 @@ settings:
   allowUploads: true
   allowedKinds:
     - image
+    - video
   branchLimit: null
   defaultPlacement: end
   defaultUploadLocationSource: 'volume:a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d' # Project Media
@@ -22,7 +23,7 @@ settings:
   restrictedDefaultUploadSubpath: ''
   restrictedLocationSource: null
   restrictedLocationSubpath: ''
-  selectionLabel: 'Add image'
+  selectionLabel: 'Add media'
   showSearchInput: true
   showSiteMenu: false
   showUnpermittedFiles: false
