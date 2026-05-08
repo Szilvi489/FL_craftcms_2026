@@ -1,16 +1,10 @@
 {% extends "_layouts/main.twig" %}
 
+{% block barbaNamespace %}index{% endblock %}
 {% block navLayout %}fl-fullscreen{% endblock %}
 {% block navTheme %}dynamic-inverse{% endblock %}
+{% block navBackHref %}{{ siteUrl }}#home-reveal{% endblock %}
 {% block title %}Index - {{ siteName }}{% endblock %}
-
-{% block pageStyles %}
-  <link rel="stylesheet" href="/css/index/index.css?v=9">
-{% endblock %}
-
-{% block pageScripts %}
-  <script src="/js/index/indexPage.js?v=4"></script>
-{% endblock %}
 
 {% block content %}
 {% set indexEntry = entry is defined and entry.section is defined and entry.section.handle == 'indexPage' ? entry : null %}

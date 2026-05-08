@@ -34,16 +34,19 @@
 .site-nav--theme-black {
   color: var(--color-text);
   mix-blend-mode: normal;
+  --site-nav-fill-contrast: #ffffff;
 }
 
 .site-nav--theme-white {
   color: #ffffff;
   mix-blend-mode: normal;
+  --site-nav-fill-contrast: var(--color-text);
 }
 
 .site-nav--theme-dynamic-inverse {
   color: #ffffff;
   mix-blend-mode: difference;
+  --site-nav-fill-contrast: var(--color-text);
 }
 
 .site-nav--behavior-static {
@@ -55,9 +58,8 @@
 }
 
 .site-nav--layout-home-only {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
+  left: 1rem;
+  right: 1rem;
   justify-content: center;
   width: auto;
 }
@@ -71,6 +73,42 @@
 .site-home-link,
 .site-nav__link {
   display: inline-block;
+}
+
+.site-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.site-back-link__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid currentColor;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.site-back-link__icon-svg {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  transform: translateX(0.12rem);
+  transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
+}
+
+.site-back-link:hover .site-back-link__icon,
+.site-back-link:focus-visible .site-back-link__icon {
+  background-color: currentColor;
+}
+
+.site-back-link:hover .site-back-link__icon-svg,
+.site-back-link:focus-visible .site-back-link__icon-svg {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--site-nav-fill-contrast);
 }
 
 .site-nav__legal {
@@ -95,25 +133,75 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   color: inherit;
   cursor: pointer;
 }
 
-.site-fullscreen-toggle[aria-pressed="true"] .site-fullscreen-toggle__icon {
-  transform: scale(0.9);
+.site-fullscreen-toggle__frame {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid currentColor;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.site-fullscreen-toggle__icon,
+.site-fullscreen-toggle__plus {
+  position: absolute;
+  width: 1.35rem;
+  height: 1.35rem;
+  transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
 }
 
 .site-fullscreen-toggle__icon {
-  width: 1.35rem;
-  height: 1.35rem;
-  transition: transform 180ms ease;
+  opacity: 1;
+  transform: scale(1);
 }
 
+.site-fullscreen-toggle__plus {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.site-fullscreen-toggle[aria-pressed="true"] .site-fullscreen-toggle__frame {
+  transform: scale(0.94);
+}
+
+.site-fullscreen-toggle:hover .site-fullscreen-toggle__frame,
+.site-fullscreen-toggle:focus-visible .site-fullscreen-toggle__frame {
+  background-color: currentColor;
+}
+
+.site-fullscreen-toggle:hover .site-fullscreen-toggle__icon,
+.site-fullscreen-toggle:focus-visible .site-fullscreen-toggle__icon {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.site-fullscreen-toggle:hover .site-fullscreen-toggle__plus,
+.site-fullscreen-toggle:focus-visible .site-fullscreen-toggle__plus {
+  opacity: 1;
+  transform: scale(1);
+  color: var(--site-nav-fill-contrast);
+}
+
+.site-nav--layout-home-only .site-home-link,
 .site-nav--layout-fl-fullscreen .site-home-link {
   position: relative;
   z-index: 1;
+}
+
+.site-nav--layout-home-only .site-back-link,
+.site-nav--layout-fl-fullscreen .site-back-link {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
 }
 
 .site-nav--layout-fl-fullscreen .site-fullscreen-toggle {
@@ -155,13 +243,38 @@
   }
 
   .site-nav--layout-home-only {
-    left: 50%;
-    right: auto;
+    left: 0.85rem;
+    right: 0.85rem;
   }
 
   .site-nav--layout-fl-fullscreen {
     left: 0.85rem;
     right: 0.85rem;
+  }
+
+  .site-back-link {
+    gap: 0.35rem;
+  }
+
+  .site-back-link__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .site-fullscreen-toggle {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .site-fullscreen-toggle__frame {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .site-fullscreen-toggle__icon,
+  .site-fullscreen-toggle__plus {
+    width: 1.15rem;
+    height: 1.15rem;
   }
 
   .site-nav__legal {

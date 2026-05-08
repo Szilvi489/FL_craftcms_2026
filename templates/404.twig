@@ -16,16 +16,9 @@
   {% set homeEntry = craft.entries().section('homepage').site(currentSite).one() %}
 {% endif %}
 
+{% block barbaNamespace %}not-found{% endblock %}
 {% block navLayout %}home-only{% endblock %}
 {% block title %}404 - {{ siteName }}{% endblock %}
-
-{% block pageStyles %}
-  <link rel="stylesheet" href="/css/404/404.css?v=2">
-{% endblock %}
-
-{% block pageScripts %}
-  <script src="/js/404/404Gallery.js?v=2"></script>
-{% endblock %}
 
 {% block content %}
 {% set coverHoleTop = homeEntry and homeEntry.coverHoleTop ? homeEntry.coverHoleTop : '12vh' %}

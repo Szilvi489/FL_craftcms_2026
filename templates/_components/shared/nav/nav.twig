@@ -1,4 +1,15 @@
 <nav class="site-nav site-nav--layout-{{ navLayout|default('full') }} site-nav--theme-{{ navTheme|default('black') }} site-nav--behavior-{{ navBehavior|default('static') }}" aria-label="Primary">
+  {% if navBackHref is defined and navBackHref %}
+    <a class="site-nav__link site-back-link" href="{{ navBackHref }}">
+      <span class="site-back-link__icon" aria-hidden="true">
+        <svg class="site-back-link__icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.5 6.5 8.5 12l6 5.5" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.75"/>
+          <path d="M9 12h8.5" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.75"/>
+        </svg>
+      </span>
+      <span class="site-back-link__label">back</span>
+    </a>
+  {% endif %}
   {% if navLayout|default('full') not in ['home-only', 'fl-fullscreen'] %}
     <a class="site-nav__link" href="/index">Index</a>
     <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-info-panel">
@@ -11,17 +22,27 @@
   <a class="site-home-link site-nav__link" href="{{ siteUrl }}#home-reveal" aria-label="Home">FL</a>
   {% if navLayout|default('full') == 'fl-fullscreen' %}
     <button class="site-nav__button site-fullscreen-toggle" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
-      <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.6"/>
-      </svg>
+      <span class="site-fullscreen-toggle__frame" aria-hidden="true">
+        <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="0.8"/>
+        </svg>
+        <svg class="site-fullscreen-toggle__plus" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7v10M7 12h10" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.1"/>
+        </svg>
+      </span>
     </button>
   {% endif %}
   {% if navLayout|default('full') not in ['home-only', 'fl-fullscreen'] %}
   <a class="site-nav__link" href="/shop">Shop</a>
         <button class="site-nav__button site-fullscreen-toggle site-fullscreen-toggle--inline" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
-        <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.6"/>
-        </svg>
+        <span class="site-fullscreen-toggle__frame" aria-hidden="true">
+          <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="0.8"/>
+          </svg>
+          <svg class="site-fullscreen-toggle__plus" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 7v10M7 12h10" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.1"/>
+          </svg>
+        </span>
       </button>
     <div class="site-nav__legal">
       <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-imprint-panel">

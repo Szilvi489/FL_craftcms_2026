@@ -1,29 +1,54 @@
 {% extends "_layouts/main.twig" %}
 
+{% block barbaNamespace %}project{% endblock %}
 {% block navLayout %}fl-fullscreen{% endblock %}
+{% block navBackHref %}/index{% endblock %}
 
 {% block content %}
+{% set heroMedia = entry.heroImage.one() %}
 <article class="project">
-  <header class="project-intro">
-    <h1>{{ entry.title }}</h1>
-
-    {% if entry.projectType or entry.client %}
-      <p class="project-meta">
-        {{ [entry.projectType, entry.client]|filter|join(' / ') }}
-      </p>
-    {% endif %}
-
-    {% if entry.description %}
-      <div class="project-description">
-        {{ entry.description|nl2br }}
+  <header class="project-intro" aria-label="Project introduction" {% if entry.heroImage %} data-default-preview-key="hero-image"{% endif %}>
+    {% if heroMedia %}
+      <div class="project-intro__background" aria-hidden="true">
+        {% if heroMedia.kind == 'video' %}
+          <video
+            src="{{ heroMedia.url }}"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+          ></video>
+        {% else %}
+          <img src="{{ heroMedia.url }}" alt="">
+        {% endif %}
       </div>
     {% endif %}
 
-    {% if entry.externalLink %}
-      <a class="project-link" href="{{ entry.externalLink }}" rel="noopener" target="_blank">Full story</a>
-    {% endif %}
+    <div class="project-intro__content">
+      <h1>{{ entry.title }}</h1>
+      {% if entry.projectYear %}
+        <div class="project-project-year">
+          {{ entry.projectYear }}
+        </div>
+      {% endif %}
 
-    <a class="back-link" href="/index">back</a>
+      {% if entry.projectType or entry.client %}
+        <p class="project-meta">
+          {{ [entry.projectType, entry.client]|filter|join(' / ') }}
+        </p>
+      {% endif %}
+
+      {% if entry.description %}
+        <div class="project-description">
+          {{ entry.description|nl2br }}
+        </div>
+      {% endif %}
+
+      {% if entry.externalLink %}
+        <a class="project-link" href="{{ entry.externalLink }}" rel="noopener" target="_blank">Full story</a>
+      {% endif %}
+    </div>
   </header>
 
   <div class="project-blocks">

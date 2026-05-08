@@ -16,17 +16,9 @@
   {% set homeEntry = craft.entries().section('homepage').site(currentSite).one() %}
 {% endif %}
 
+{% block barbaNamespace %}home{% endblock %}
 {% block navTheme %}dynamic-inverse{% endblock %}
 {% block navBehavior %}home-reveal{% endblock %}
-
-{% block pageStyles %}
-  <link rel="stylesheet" href="/css/home/home.css?v=2">
-{% endblock %}
-
-{% block pageScripts %}
-  <script src="/js/vendor/ScrollTrigger.min.js"></script>
-  <script src="/js/home/homeHero.js?v=4"></script>
-{% endblock %}
 
 {% block content %}
 {% set homeMedia = homeEntry ? homeEntry.indexImage.one() : null %}

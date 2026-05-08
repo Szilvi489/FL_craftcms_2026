@@ -1,62 +1,39 @@
-(function() {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+export function initPageTransition({ mountPage, destroyCurrentPage, getActivePageApi }) {
+  const barba = window.barba;
+  const gsap = window.gsap;
+  const html = document.documentElement;
+  const transitionRoot = document.querySelector(".page-transition");
+  const transitionWindow = transitionRoot?.querySelector(".page-transition__window");
+
+  if (
+    typeof mountPage !== "function" ||
+    typeof destroyCurrentPage !== "function" ||
+    typeof getActivePageApi !== "function"
+  ) {
     return;
   }
 
-  const transitionKey = "site-page-transition";
-  const homeRevealStorageKey = "home-reveal-target";
+  if (!barba || !gsap || !transitionRoot || !transitionWindow || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
   const NAV_OUT_DURATION = 420;
   const NAV_IN_DURATION = 420;
   const COVER_CLOSE_DURATION = 2000;
   const PAGE_CHANGE_HOLD_DURATION = 1000;
   const COVER_OPEN_DURATION = 2000;
-  const html = document.documentElement;
-  const body = document.body;
-  const { gsap } = window;
-  const siteNav = document.querySelector(".site-nav");
-  const siteMain = document.querySelector(".site-main");
-  const transitionRoot = document.querySelector(".page-transition");
-  const transitionWindow = transitionRoot?.querySelector(".page-transition__window");
-
-  if (!gsap || !body || !siteMain || !transitionRoot || !transitionWindow) {
-    return;
-  }
-
   let isTransitioning = false;
 
-  const readState = () => {
-    try {
-      const raw = window.sessionStorage.getItem(transitionKey);
-      return raw ? JSON.parse(raw) : null;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  const writeState = (state) => {
-    try {
-      window.sessionStorage.setItem(transitionKey, JSON.stringify(state));
-    } catch (error) {
-      return;
-    }
-  };
-
-  const clearState = () => {
-    try {
-      window.sessionStorage.removeItem(transitionKey);
-    } catch (error) {
-      return;
-    }
-  };
+  const wait = (ms) => new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
 
   const nextFrame = () => new Promise((resolve) => {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(resolve);
     });
   });
-  const wait = (ms) => new Promise((resolve) => {
-    window.setTimeout(resolve, ms);
-  });
+
   const tweenTo = (target, vars) => new Promise((resolve) => {
     gsap.to(target, {
       ...vars,
@@ -66,17 +43,6 @@
   });
 
   const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
-  const shouldPrepareHomeReveal = () => {
-    if (window.location.hash === "#home-reveal") {
-      return true;
-    }
-
-    try {
-      return window.sessionStorage.getItem(homeRevealStorageKey) === "1";
-    } catch (error) {
-      return false;
-    }
-  };
 
   const exitFullscreenIfNeeded = async () => {
     if (!fullscreenElement()) {
@@ -108,24 +74,45 @@
     return Math.max(1, ((maxDistance * 2) / rect.width) * oversizeMultiplier);
   };
 
-  const resetPreview = () => {
-    return;
+  const getContainerNav = (container) => container?.querySelector(".site-nav") || null;
+  const getNavAnimationTargets = (siteNav) => {
+    if (!siteNav) {
+      return [];
+    }
+
+    if (siteNav.classList.contains("site-nav--behavior-home-reveal")) {
+      return [siteNav];
+    }
+
+    return Array.from(siteNav.querySelectorAll(".site-nav__link, .site-nav__button"));
+  };
+  const normalizeHash = (hash = "") => {
+    if (!hash) {
+      return "";
+    }
+
+    return hash.startsWith("#") ? hash : `#${hash}`;
   };
 
-  const animateNavOut = async () => {
-    if (!siteNav) {
+  const animateNavOut = async (container) => {
+    const siteNav = getContainerNav(container);
+    const targets = getNavAnimationTargets(siteNav);
+
+    if (!siteNav || !targets.length) {
       return;
     }
 
-    const currentY = Number(gsap.getProperty(siteNav, "y")) || 0;
+    const currentY = siteNav.classList.contains("site-nav--behavior-home-reveal")
+      ? Number(gsap.getProperty(siteNav, "y")) || 0
+      : 0;
 
-    gsap.killTweensOf(siteNav);
-    gsap.set(siteNav, {
+    gsap.killTweensOf(targets);
+    gsap.set(targets, {
       autoAlpha: 1,
       y: currentY,
     });
 
-    await tweenTo(siteNav, {
+    await tweenTo(targets, {
       autoAlpha: 0,
       y: currentY - 24,
       duration: NAV_OUT_DURATION / 1000,
@@ -133,31 +120,43 @@
     });
   };
 
-  const animateNavIn = async () => {
-    if (!siteNav) {
+  const animateNavIn = async (container) => {
+    const siteNav = getContainerNav(container);
+    const targets = getNavAnimationTargets(siteNav);
+
+    if (!siteNav || !targets.length) {
       return;
     }
 
-    gsap.killTweensOf(siteNav);
-    gsap.set(siteNav, {
+    gsap.killTweensOf(targets);
+    gsap.set(targets, {
       autoAlpha: 0,
       y: -24,
     });
 
-    await tweenTo(siteNav, {
+    await tweenTo(targets, {
       autoAlpha: 1,
       y: 0,
       duration: NAV_IN_DURATION / 1000,
       ease: "power2.inOut",
+    });
+
+    gsap.set(targets, {
       clearProps: "opacity,visibility,transform",
     });
   };
 
-  const playLeaveTransition = async (href) => {
-    isTransitioning = true;
-    await animateNavOut();
+  const resetTransitionState = () => {
+    transitionRoot.classList.remove("is-active");
+    html.classList.remove("is-barba-transitioning");
+    gsap.killTweensOf(transitionWindow);
+    gsap.set(transitionWindow, {
+      clearProps: "transform",
+    });
+    isTransitioning = false;
+  };
 
-    resetPreview();
+  const closeCover = async () => {
     const coverScale = getCoverScale(1.35);
     gsap.killTweensOf(transitionWindow);
     gsap.set(transitionWindow, {
@@ -165,12 +164,7 @@
       force3D: true,
     });
     transitionRoot.classList.add("is-active");
-
-    writeState({
-      href,
-      ts: Date.now(),
-    });
-
+    html.classList.add("is-barba-transitioning");
     await nextFrame();
 
     await tweenTo(transitionWindow, {
@@ -178,49 +172,9 @@
       duration: COVER_CLOSE_DURATION / 1000,
       ease: "power2.inOut",
     });
-    window.location.href = href;
   };
 
-  const playEnterTransition = async (state) => {
-    if (!state) {
-      html.classList.remove("has-page-transition-enter");
-      clearState();
-      return;
-    }
-
-    transitionRoot.classList.add("is-active");
-    resetPreview();
-    gsap.killTweensOf(transitionWindow);
-    gsap.set(transitionWindow, {
-      scale: 1,
-      force3D: true,
-    });
-
-    if (siteNav) {
-      gsap.set(siteNav, {
-        autoAlpha: 0,
-        y: -24,
-      });
-    }
-
-    html.classList.remove("has-page-transition-enter");
-    clearState();
-
-    await nextFrame();
-
-    let preparedHomeReveal = false;
-
-    if (
-      shouldPrepareHomeReveal() &&
-      window.__homeHeroTransition &&
-      typeof window.__homeHeroTransition.applyRevealForPageTransition === "function"
-    ) {
-      preparedHomeReveal = await window.__homeHeroTransition.applyRevealForPageTransition();
-      await nextFrame();
-    }
-
-    await wait(PAGE_CHANGE_HOLD_DURATION);
-
+  const openCover = async () => {
     const coverScale = getCoverScale(1.35);
 
     await tweenTo(transitionWindow, {
@@ -230,89 +184,133 @@
     });
 
     transitionRoot.classList.remove("is-active");
+    html.classList.remove("is-barba-transitioning");
     gsap.set(transitionWindow, {
       clearProps: "transform",
     });
-    resetPreview();
-
-    if (!preparedHomeReveal) {
-      await animateNavIn();
-    }
-
-    isTransitioning = false;
-    window.dispatchEvent(new CustomEvent("site:page-transition-enter-finished"));
   };
 
-  document.addEventListener("click", async (event) => {
-    if (event.defaultPrevented || isTransitioning) {
+  const syncDocumentTitle = (nextHtml) => {
+    if (!nextHtml) {
       return;
     }
 
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-      return;
+    const parsedDocument = new DOMParser().parseFromString(nextHtml, "text/html");
+
+    if (parsedDocument.title) {
+      document.title = parsedDocument.title;
     }
+  };
 
-    const link = event.target.closest("a[href]");
+  const shouldRevealHome = (current, next, trigger) => {
+    const nextHash = normalizeHash(next?.url?.hash || "");
+    const triggeredFromHomeLink = Boolean(trigger?.classList?.contains("site-home-link"));
+    const comingFromAnotherPage = Boolean(current?.namespace && current.namespace !== "home");
 
-    if (!link || link.target === "_blank" || link.hasAttribute("download")) {
-      return;
-    }
-
-    const href = link.href;
-
-    if (!href) {
-      return;
-    }
-
-    const url = new URL(href, window.location.href);
-
-    if (url.origin !== window.location.origin) {
-      return;
-    }
-
-    const isSameDocument = (
-      url.pathname === window.location.pathname &&
-      url.search === window.location.search
+    return next?.namespace === "home" && (
+      nextHash === "#home-reveal" ||
+      triggeredFromHomeLink ||
+      comingFromAnotherPage
     );
+  };
 
-    if (isSameDocument) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (link.classList.contains("site-home-link")) {
-      try {
-        window.sessionStorage.setItem(homeRevealStorageKey, "1");
-      } catch (error) {
-        // Ignore storage errors and continue with the page transition.
+  barba.init({
+    preventRunning: true,
+    prevent: ({ href }) => {
+      if (!href) {
+        return true;
       }
-    }
 
-    await exitFullscreenIfNeeded();
-    await playLeaveTransition(url.href);
-  }, true);
+      const url = new URL(href, window.location.href);
+      return (
+        url.origin !== window.location.origin ||
+        (url.pathname === window.location.pathname && url.search === window.location.search)
+      );
+    },
+    transitions: [{
+      name: "site-transition",
+      async leave(data) {
+        try {
+          isTransitioning = true;
+          await exitFullscreenIfNeeded();
+          const currentPageApi = getActivePageApi();
 
-  const initialState = readState();
+          await Promise.all([
+            animateNavOut(data.current.container),
+            currentPageApi && typeof currentPageApi.animateLeave === "function"
+              ? currentPageApi.animateLeave()
+              : Promise.resolve(),
+          ]);
 
-  if (html.classList.contains("has-page-transition-enter")) {
-    if (!initialState) {
-      html.classList.remove("has-page-transition-enter");
-      clearState();
+          await closeCover();
+          destroyCurrentPage();
+          data.current.container.remove();
+        } catch (error) {
+          resetTransitionState();
+          throw error;
+        }
+      },
+      async enter(data) {
+        let preparedHomeReveal = false;
+        let pageApi = null;
+
+        try {
+          syncDocumentTitle(data.next?.html);
+          const nextNav = getContainerNav(data.next.container);
+          const nextNavTargets = getNavAnimationTargets(nextNav);
+
+          if (nextNavTargets.length) {
+            gsap.set(nextNavTargets, {
+              autoAlpha: 0,
+              y: -24,
+            });
+          }
+
+          pageApi = mountPage(data.next.container);
+
+          if (pageApi && typeof pageApi.prepareEnterForTransition === "function") {
+            pageApi.prepareEnterForTransition();
+          }
+
+          if (
+            shouldRevealHome(data.current, data.next, data.trigger) &&
+            pageApi &&
+            typeof pageApi.prepareRevealForTransition === "function"
+          ) {
+            preparedHomeReveal = await pageApi.prepareRevealForTransition();
+            await nextFrame();
+          }
+
+          await wait(PAGE_CHANGE_HOLD_DURATION);
+          await openCover();
+
+          if (preparedHomeReveal && pageApi && typeof pageApi.animateNavIntoReveal === "function") {
+            await pageApi.animateNavIntoReveal();
+          } else if (!preparedHomeReveal && data.next.namespace !== "home") {
+            await Promise.all([
+              animateNavIn(data.next.container),
+              pageApi && typeof pageApi.animateEnter === "function"
+                ? pageApi.animateEnter()
+                : Promise.resolve(),
+            ]);
+          } else if (pageApi && typeof pageApi.animateEnter === "function") {
+            await pageApi.animateEnter();
+          }
+
+          isTransitioning = false;
+        } catch (error) {
+          resetTransitionState();
+          throw error;
+        }
+      },
+    }],
+  });
+
+  window.addEventListener("beforeunload", () => {
+    if (!isTransitioning) {
       return;
     }
 
-    const startEnterTransition = () => {
-      window.requestAnimationFrame(() => {
-        playEnterTransition(initialState);
-      });
-    };
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", startEnterTransition, { once: false });
-    } else {
-      startEnterTransition();
-    }
-  }
-})();
+    html.classList.remove("is-barba-transitioning");
+  });
+}

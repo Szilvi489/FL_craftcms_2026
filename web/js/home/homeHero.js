@@ -1,16 +1,18 @@
-(function() {
+export function initHomeHero(root = document) {
   const body = document.body;
-  const hero = document.querySelector(".home-hero");
+  const abortController = new AbortController();
+  const { signal } = abortController;
+  const hero = root.querySelector(".home-hero");
   const hole = hero?.querySelector(".home-hero__hole");
   const introTitle = hero?.querySelector(".intro-title");
-  const homeLink = document.querySelector(".site-home-link");
-  const siteNav = document.querySelector(".site-nav");
+  const homeLink = root.querySelector(".site-home-link");
+  const siteNav = root.querySelector(".site-nav");
   const navItems = siteNav ? [siteNav] : [];
   const navRevealStart = 0.72;
   const homeRevealHash = "#home-reveal";
   const homeRevealProgress = 0.995;
-  const homeRevealStorageKey = "home-reveal-target";
-  let revealHandledByTransition = false;
+  let heroTimeline = null;
+
   const waitForFrames = (count = 1) => new Promise((resolve) => {
     const step = () => {
       if (count <= 0) {
@@ -25,23 +27,48 @@
     window.requestAnimationFrame(step);
   });
 
+  const tweenTo = (target, vars) => new Promise((resolve) => {
+    gsap.to(target, {
+      ...vars,
+      onComplete: resolve,
+      onInterrupt: resolve,
+    });
+  });
+
   const setNavRevealed = (revealed) => {
     body.classList.toggle("home-nav-revealed", revealed);
   };
 
+  const destroy = () => {
+    abortController.abort();
+    setNavRevealed(false);
+
+    if (heroTimeline?.scrollTrigger) {
+      heroTimeline.scrollTrigger.kill();
+    }
+
+    if (heroTimeline) {
+      heroTimeline.kill();
+    }
+
+    if (window.gsap) {
+      window.gsap.killTweensOf(navItems);
+      window.gsap.killTweensOf(hole);
+      window.gsap.killTweensOf(introTitle);
+      window.gsap.set(navItems, { clearProps: "opacity,visibility,transform" });
+      window.gsap.set(hole, { clearProps: "transform" });
+      window.gsap.set(introTitle, { clearProps: "opacity,visibility,transform" });
+    }
+  };
+
   if (!hero || !hole || !introTitle || navItems.length === 0) {
     setNavRevealed(true);
-    return;
+    return { destroy };
   }
 
-  if (!window.gsap || !window.ScrollTrigger) {
+  if (!window.gsap || !window.ScrollTrigger || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     setNavRevealed(true);
-    return;
-  }
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    setNavRevealed(true);
-    return;
+    return { destroy };
   }
 
   const { gsap } = window;
@@ -80,7 +107,7 @@
     return targetCenter - currentCenter;
   };
 
-  const heroTimeline = gsap.timeline({
+  heroTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: hero,
       start: "top top",
@@ -116,7 +143,7 @@
   }, 0.22);
 
   const getHomeRevealScrollTop = () => {
-    const trigger = heroTimeline.scrollTrigger;
+    const trigger = heroTimeline?.scrollTrigger;
 
     if (!trigger) {
       return 0;
@@ -132,33 +159,8 @@
     });
   };
 
-  const shouldApplyHomeReveal = () => {
-    if (window.location.hash === homeRevealHash) {
-      return true;
-    }
-
-    try {
-      return window.sessionStorage.getItem(homeRevealStorageKey) === "1";
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const clearHomeRevealFlag = () => {
-    try {
-      window.sessionStorage.removeItem(homeRevealStorageKey);
-    } catch (error) {
-      return;
-    }
-  };
-
-  const runHomeReveal = async () => {
-    if (!shouldApplyHomeReveal()) {
-      return false;
-    }
-
+  const reveal = async () => {
     ScrollTrigger.refresh();
-
     await waitForFrames(1);
     scrollToHomeReveal("auto");
     ScrollTrigger.update();
@@ -166,47 +168,88 @@
     ScrollTrigger.refresh();
     ScrollTrigger.update();
     setNavRevealed(true);
-    clearHomeRevealFlag();
     return true;
   };
 
-  window.__homeHeroTransition = {
-    async applyRevealForPageTransition() {
-      if (!shouldApplyHomeReveal()) {
-        return false;
+  const prepareRevealForTransition = async () => {
+    ScrollTrigger.refresh();
+    await waitForFrames(1);
+    scrollToHomeReveal("auto");
+    ScrollTrigger.update();
+    await waitForFrames(2);
+    ScrollTrigger.refresh();
+    ScrollTrigger.update();
+
+    const revealY = centerNavRowInViewport();
+    const holeScale = scaleToCoverViewport();
+    gsap.set(hole, {
+      scale: holeScale,
+    });
+    gsap.set(introTitle, {
+      autoAlpha: 0,
+      y: -650,
+    });
+    setNavRevealed(true);
+    gsap.killTweensOf(navItems);
+    gsap.set(navItems, {
+      autoAlpha: 0,
+      y: revealY - 24,
+    });
+
+    return true;
+  };
+
+  const animateNavIntoReveal = async () => {
+    scrollToHomeReveal("auto");
+    ScrollTrigger.update();
+    const revealY = centerNavRowInViewport();
+    setNavRevealed(true);
+    gsap.killTweensOf(navItems);
+    gsap.set(navItems, {
+      autoAlpha: 0,
+      y: revealY - 24,
+    });
+
+    await tweenTo(navItems, {
+      autoAlpha: 1,
+      y: revealY,
+      duration: 0.42,
+      ease: "power2.inOut",
+    });
+
+    await waitForFrames(1);
+    ScrollTrigger.refresh();
+    ScrollTrigger.update();
+    setNavRevealed(true);
+    gsap.set(navItems, {
+      autoAlpha: 1,
+      y: centerNavRowInViewport(),
+    });
+  };
+
+  if (homeLink && window.location.pathname === new URL(homeLink.href, window.location.href).pathname) {
+    homeLink.addEventListener("click", (event) => {
+      const targetUrl = new URL(homeLink.href, window.location.href);
+      const isSameDocument = (
+        targetUrl.pathname === window.location.pathname &&
+        targetUrl.search === window.location.search
+      );
+
+      if (!isSameDocument) {
+        return;
       }
 
-      revealHandledByTransition = true;
-      return runHomeReveal();
-    },
-  };
-
-  const applyHomeRevealHash = async () => {
-    if (revealHandledByTransition) {
-      return;
-    }
-
-    if (!shouldApplyHomeReveal()) {
-      return;
-    }
-
-    if (document.documentElement.classList.contains("has-page-transition-enter")) {
-      window.addEventListener("site:page-transition-enter-finished", runHomeReveal, { once: true });
-      return;
-    }
-
-    await runHomeReveal();
-  };
-
-  if (homeLink && window.location.pathname === new URL(homeLink.href).pathname) {
-    homeLink.addEventListener("click", (event) => {
       event.preventDefault();
       ScrollTrigger.refresh();
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${homeRevealHash}`);
       scrollToHomeReveal("smooth");
-    });
+    }, { signal });
   }
 
-  window.addEventListener("load", applyHomeRevealHash, { once: true });
-  window.addEventListener("pageshow", applyHomeRevealHash, { once: true });
-})();
+  return {
+    destroy,
+    reveal,
+    prepareRevealForTransition,
+    animateNavIntoReveal,
+  };
+}

@@ -1,18 +1,14 @@
-(function() {
-  const fullscreenToggles = Array.from(document.querySelectorAll(".site-fullscreen-toggle"));
-  const toggles = Array.from(document.querySelectorAll(".site-panel-toggle"));
-  const homeLink = document.querySelector(".site-home-link");
-  const siteNav = document.querySelector(".site-nav");
-  const hasSharedPageTransition = Boolean(document.querySelector(".page-transition"));
-  const homeRevealStorageKey = "home-reveal-target";
+export function initSiteUI(root = document) {
+  const abortController = new AbortController();
+  const { signal } = abortController;
+  const fullscreenToggles = Array.from(root.querySelectorAll(".site-fullscreen-toggle"));
+  const toggles = Array.from(root.querySelectorAll(".site-panel-toggle"));
+  const siteNav = root.querySelector(".site-nav");
   let originalNavTop = null;
 
   const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
   const canEnterFullscreen = () => Boolean(
     document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen
-  );
-  const canExitFullscreen = () => Boolean(
-    document.exitFullscreen || document.webkitExitFullscreen
   );
 
   const syncFullscreenButtons = () => {
@@ -54,61 +50,33 @@
           } finally {
             syncFullscreenButtons();
           }
-        });
+        }, { signal });
       });
 
-      document.addEventListener("fullscreenchange", syncFullscreenButtons);
-      document.addEventListener("webkitfullscreenchange", syncFullscreenButtons);
+      document.addEventListener("fullscreenchange", syncFullscreenButtons, { signal });
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButtons, { signal });
       syncFullscreenButtons();
     }
   }
 
-  if (homeLink && !hasSharedPageTransition) {
-    const homePathname = new URL(homeLink.href).pathname;
-
-    if (window.location.pathname !== homePathname) {
-      homeLink.addEventListener("click", async (event) => {
-        try {
-          window.sessionStorage.setItem(homeRevealStorageKey, "1");
-        } catch (error) {
-          // Ignore storage failures and fall back to the hash-only behavior.
-        }
-
-        if (!fullscreenElement()) {
-          return;
-        }
-
-        event.preventDefault();
-
-        try {
-          if (document.exitFullscreen) {
-            await document.exitFullscreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          }
-        } catch (error) {
-          console.error("Exiting fullscreen before home navigation failed", error);
-        } finally {
-          window.location.href = homeLink.href;
-        }
-      });
-    }
-  }
-
   if (!toggles.length) {
-    return;
+    return () => {
+      abortController.abort();
+    };
   }
 
   const pairs = toggles
     .map((toggle) => {
       const panelId = toggle.getAttribute("aria-controls");
-      const panel = panelId ? document.getElementById(panelId) : null;
+      const panel = panelId ? root.querySelector(`#${panelId}`) : null;
       return panel ? { toggle, panel } : null;
     })
     .filter(Boolean);
 
   if (!pairs.length) {
-    return;
+    return () => {
+      abortController.abort();
+    };
   }
 
   const isPhoneViewport = () => window.matchMedia("(max-width: 500px)").matches;
@@ -176,14 +144,14 @@
   pairs.forEach(({ toggle, panel }) => {
     toggle.addEventListener("click", () => {
       setOpen(toggle, !panel.classList.contains("is-open"));
-    });
+    }, { signal });
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeAll();
     }
-  });
+  }, { signal });
 
   document.addEventListener("click", (event) => {
     const clickedToggle = pairs.some(({ toggle }) => toggle.contains(event.target));
@@ -192,7 +160,7 @@
     if (!clickedToggle && !clickedPanel) {
       closeAll();
     }
-  });
+  }, { signal });
 
   window.addEventListener("resize", () => {
     if (!pairs.some(({ panel }) => panel.classList.contains("is-open"))) {
@@ -205,5 +173,10 @@
     }
 
     moveNavIntoView();
-  });
-})();
+  }, { signal });
+
+  return () => {
+    closeAll();
+    abortController.abort();
+  };
+}
