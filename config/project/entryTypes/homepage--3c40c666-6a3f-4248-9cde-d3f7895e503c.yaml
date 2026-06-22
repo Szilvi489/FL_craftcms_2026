@@ -13,44 +13,6 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: aa1e8ce0-05c5-457a-9768-f8464c977732 # Index Image
-            handle: null
-            instructions: null
-            label: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: c1a6ab41-408d-40c5-a6ad-0c5a86f7ec11
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: '2026-05-06T18:58:06+00:00'
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: e58ed5ee-9d27-4e11-9395-1c321b34a1b8
-            handle: null
-            instructions: null
-            label: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 2e8d6d29-613f-4e11-9566-b2e72f34c1ff
-            userCondition: null
-            warning: null
-            width: 100
-        name: Content
-        uid: e76d019b-9979-4604-b3bf-0d5227d43421
-        userCondition: null
-      -
-        elementCondition: null
-        elements:
-          -
-            dateAdded: '2026-05-06T18:56:38+00:00'
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
             fieldUid: fec4bc85-219e-4ed8-acee-07b86e13c38c # Cover Hole Top
             handle: null
             instructions: null
@@ -96,6 +58,50 @@ fieldLayouts:
             width: 34
         name: 'Cover Hole Parameters'
         uid: fdd2eb2f-4347-4529-a160-af1e0ee72fdb
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-06T18:56:38+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: aa1e8ce0-05c5-457a-9768-f8464c977732 # Index Image
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: c1a6ab41-408d-40c5-a6ad-0c5a86f7ec11
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: e76d019b-9979-4604-b3bf-0d5227d43421
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-11T16:40:21+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 2a1b27e6-0377-43ff-88db-ba90b5395371 # Selected Work Card Column Container Field
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 24c044f2-d9d1-4e93-9cc4-5cafff998d6a
+            userCondition: null
+            warning: null
+            width: 100
+        name: 'Selected Work Cards Container'
+        uid: 4ed63997-b0d9-451e-b1ab-10d575620535
         userCondition: null
     thumbFieldKey: null
 handle: homepage

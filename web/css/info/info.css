@@ -6,6 +6,7 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  --site-home-panel-opacity: 1;
   transform: translateY(calc(100% + 1rem));
   transition: transform 260ms ease, opacity 260ms ease, visibility 260ms ease;
 }
@@ -25,6 +26,11 @@
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+.site-info-panel.is-open.is-home-tracked-panel {
+  opacity: var(--site-home-panel-opacity, 1);
+  transition: transform 260ms ease, opacity 120ms linear, visibility 260ms ease;
 }
 
 @media (max-width: 500px) {

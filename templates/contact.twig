@@ -1,14 +1,27 @@
 {% extends "_layouts/main.twig" %}
 
-{% block barbaNamespace %}contact{% endblock %}
-{% block content %}
-<section class="info-page">
-  <div class="info-page__intro">
-    <h1>Contact</h1>
-  </div>
+{% set contactEntry = null %}
+{% if currentUser %}
+  {% set contactEntry = craft.entries()
+    .section('contactpage')
+    .site(currentSite)
+    .status(null)
+    .draftOf(false)
+    .savedDraftsOnly()
+    .draftCreator(currentUser)
+    .orderBy('elements.dateUpdated DESC')
+    .one() %}
+{% endif %}
+{% if not contactEntry %}
+  {% set contactEntry = craft.entries().section('contactpage').site(currentSite).one() %}
+{% endif %}
 
-  <div class="info-page__content">
-    {% include "_components/contact.twig" %}
-  </div>
-</section>
+{% block barbaNamespace %}contact{% endblock %}
+{% block title %}{{ contactEntry and contactEntry.title ? contactEntry.title : 'Contact' }} - {{ siteName }}{% endblock %}
+
+{% block content %}
+  {% include "_components/contact.twig" with {
+    contactEntry: contactEntry,
+    contactSubmission: submission ?? null
+  } %}
 {% endblock %}

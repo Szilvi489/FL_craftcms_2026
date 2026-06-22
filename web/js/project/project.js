@@ -1,10 +1,26 @@
 export function initProjectPage(root = document) {
+  const abortController = new AbortController();
+  const { signal } = abortController;
   const { gsap } = window;
   const pageRoot = root.querySelector(".project");
+  const heroBackground = root.querySelector(".project-intro__background");
+  const heroBackgroundFrame = root.querySelector(".project-intro__background-frame");
+  const primaryIntroTargets = Array.from(root.querySelectorAll(".project-intro__content > *:not(.project-description)"))
+    .filter((item) => window.getComputedStyle(item).display !== "none");
+  const secondaryIntroTargets = Array.from(root.querySelectorAll(".project-description, .project-link"))
+    .filter((item) => window.getComputedStyle(item).display !== "none");
+  const bodyTextTargets = Array.from(root.querySelectorAll(".text-block, figcaption"))
+    .filter((item) => window.getComputedStyle(item).display !== "none");
   const projectVideos = Array.from(root.querySelectorAll(".project video"));
   const ENTER_OFFSET_Y = -44;
   const ENTER_DURATION = 0.75;
   const LEAVE_DURATION = 0.4;
+  const HERO_DOCK_DURATION = 1.05;
+  const PRIMARY_TEXT_DELAY = 0.92;
+  const SECONDARY_TEXT_DELAY = 1.12;
+  const BODY_TEXT_DELAY = 1.02;
+  const SCROLL_TO_TOP_DURATION = 0.8;
+  const HERO_EXPAND_DURATION = 0.82;
   let isPreparedForTransition = false;
   let hasRunEnterAnimation = false;
   const getAnimatedTargets = () => Array
@@ -23,6 +39,33 @@ export function initProjectPage(root = document) {
       onInterrupt: resolve,
     });
   });
+
+  const animateScrollToTop = async () => {
+    if (!gsap) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY <= 1) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    const scrollState = { y: currentScrollY };
+
+    await tweenTo(scrollState, {
+      y: 0,
+      duration: SCROLL_TO_TOP_DURATION,
+      ease: "power3.inOut",
+      onUpdate: () => {
+        window.scrollTo(0, scrollState.y);
+      },
+    });
+
+    window.scrollTo(0, 0);
+  };
 
   const setEnterStartState = () => {
     const targets = getAnimatedTargets();
@@ -44,6 +87,59 @@ export function initProjectPage(root = document) {
     pageRoot?.classList.remove("project--transition-prep");
   };
 
+  const isDesktopLayout = () => window.matchMedia("(min-width: 901px)").matches;
+
+  const getDockedBackgroundState = () => {
+    const gutter = Math.max(window.innerWidth * 0.035, 18);
+    const top = Math.max(window.innerHeight * 0.11, 84);
+    const targetWidth = Math.min(window.innerWidth * 0.60, 1560);
+    const targetHeight = Math.max(
+      Math.min(window.innerHeight - top - gutter, window.innerHeight * 0.8),
+      420
+    );
+    const left = Math.max(window.innerWidth - gutter - targetWidth, 0);
+
+    return {
+      top,
+      left,
+      width: targetWidth,
+      height: targetHeight,
+    };
+  };
+
+  const setBackgroundStartState = () => {
+    if (!gsap || !heroBackgroundFrame || !isDesktopLayout()) {
+      return;
+    }
+
+    gsap.killTweensOf(heroBackgroundFrame);
+    gsap.set(heroBackgroundFrame, {
+      top: 0,
+      left: 0,
+      right: "auto",
+      bottom: "auto",
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
+  const syncDockedBackground = () => {
+    if (!gsap || !heroBackgroundFrame || !isDesktopLayout()) {
+      return;
+    }
+
+    gsap.set(heroBackgroundFrame, getDockedBackgroundState());
+  };
+
+  const getFullscreenBackgroundState = () => ({
+    top: 0,
+    left: 0,
+    right: "auto",
+    bottom: "auto",
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
   const runEnterAnimation = async () => {
     const targets = getAnimatedTargets();
 
@@ -53,13 +149,52 @@ export function initProjectPage(root = document) {
     }
 
     setEnterStartState();
+    setBackgroundStartState();
 
-    await tweenTo(targets, {
-      autoAlpha: 1,
-      y: 0,
-      duration: ENTER_DURATION,
-      ease: "power2.out",
-      stagger: 0.05,
+    const timeline = gsap.timeline();
+
+    if (heroBackgroundFrame && isDesktopLayout()) {
+      timeline.to(heroBackgroundFrame, {
+        ...getDockedBackgroundState(),
+        duration: HERO_DOCK_DURATION,
+        ease: "power3.inOut",
+      }, 0);
+    }
+
+    if (primaryIntroTargets.length) {
+      timeline.to(primaryIntroTargets, {
+        autoAlpha: 1,
+        y: 0,
+        duration: ENTER_DURATION,
+        ease: "power2.out",
+        stagger: 0.05,
+      }, heroBackgroundFrame && isDesktopLayout() ? PRIMARY_TEXT_DELAY : 0);
+    }
+
+    if (secondaryIntroTargets.length) {
+      timeline.to(secondaryIntroTargets, {
+        autoAlpha: 1,
+        y: 0,
+        duration: ENTER_DURATION,
+        ease: "power2.out",
+        stagger: 0.05,
+      }, heroBackgroundFrame && isDesktopLayout() ? SECONDARY_TEXT_DELAY : 0.12);
+    }
+
+    if (bodyTextTargets.length) {
+      timeline.to(bodyTextTargets, {
+        autoAlpha: 1,
+        y: 0,
+        duration: ENTER_DURATION,
+        ease: "power2.out",
+        stagger: 0.04,
+      }, heroBackgroundFrame && isDesktopLayout() ? BODY_TEXT_DELAY : 0.08);
+    }
+
+
+    await new Promise((resolve) => {
+      timeline.eventCallback("onComplete", resolve);
+      timeline.eventCallback("onInterrupt", resolve);
     });
 
     clearEnterPrepState();
@@ -72,6 +207,23 @@ export function initProjectPage(root = document) {
   projectVideos.forEach((video) => {
     video.play().catch(() => {});
   });
+
+  if (heroBackgroundFrame) {
+    window.addEventListener("resize", () => {
+      if (!hasRunEnterAnimation) {
+        return;
+      }
+
+      if (!isDesktopLayout()) {
+        gsap.set(heroBackgroundFrame, {
+          clearProps: "top,right,bottom,left,width,height",
+        });
+        return;
+      }
+
+      syncDockedBackground();
+    }, { signal });
+  }
 
   if (gsap && !document.documentElement.classList.contains("is-barba-transitioning")) {
     window.requestAnimationFrame(() => {
@@ -94,25 +246,52 @@ export function initProjectPage(root = document) {
     },
     async animateLeave() {
       const targets = getAnimatedTargets();
+      const timeline = gsap?.timeline();
 
-      if (!gsap || !targets.length) {
+      if (!gsap || !timeline) {
         return;
       }
 
       gsap.killTweensOf(targets);
 
-      await tweenTo(targets, {
-        autoAlpha: 0,
-        y: ENTER_OFFSET_Y,
-        duration: LEAVE_DURATION,
-        ease: "power2.inOut",
-        stagger: 0.025,
+      if (heroBackgroundFrame && isDesktopLayout()) {
+        gsap.killTweensOf(heroBackgroundFrame);
+        timeline.to(heroBackgroundFrame, {
+          ...getFullscreenBackgroundState(),
+          duration: HERO_EXPAND_DURATION,
+          ease: "power3.inOut",
+        }, 0);
+      }
+
+      if (targets.length) {
+        timeline.to(targets, {
+          autoAlpha: 0,
+          y: ENTER_OFFSET_Y,
+          duration: LEAVE_DURATION,
+          ease: "power2.inOut",
+          stagger: 0.025,
+        }, 0);
+      }
+
+      await new Promise((resolve) => {
+        timeline.eventCallback("onComplete", resolve);
+        timeline.eventCallback("onInterrupt", resolve);
       });
+    },
+    async beforeLeave() {
+      await animateScrollToTop();
     },
     destroy() {
       clearEnterPrepState();
+      abortController.abort();
       if (gsap) {
         gsap.killTweensOf(getAnimatedTargets());
+        if (heroBackgroundFrame) {
+          gsap.killTweensOf(heroBackgroundFrame);
+          gsap.set(heroBackgroundFrame, {
+            clearProps: "top,right,bottom,left,width,height",
+          });
+        }
       }
       projectVideos.forEach((video) => {
         video.pause();

@@ -11,6 +11,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 /* Hide scrollbars across the site while keeping scroll behavior. */
 * {
   scrollbar-width: none;
@@ -46,3 +53,31 @@ a {
   outline-offset: 2px;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .site-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 1px solid #111111;
+    background: transparent;
+    pointer-events: none;
+    opacity: 0;
+    translate: 0.45rem 0.45rem;
+    transition:
+      left 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      top 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 140ms ease,
+      background-color 140ms ease;
+  }
+
+  .site-cursor.is-visible {
+    opacity: 1;
+  }
+
+  .site-cursor.is-active {
+    background: #111111;
+  }
+}

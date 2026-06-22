@@ -1,4 +1,131 @@
-<p class="contact-text">
-  For commissions, collaborations, or general enquiries, please get in touch via
-  <a href="mailto:hello@example.com">hello@example.com</a>.
-</p>
+{% set title = contactEntry and contactEntry.title ? contactEntry.title : 'Contact' %}
+{% set introText = contactEntry ? attribute(contactEntry, 'blockText') : null %}
+{% set emailAddress = contactEntry ? attribute(contactEntry, 'email') : null %}
+{% set facebookLink = contactEntry ? attribute(contactEntry, 'facebookLink') : null %}
+{% set instaLink = contactEntry ? attribute(contactEntry, 'instaLink') : null %}
+{% set heroMedia = contactEntry and attribute(contactEntry, 'heroImage') ? attribute(contactEntry, 'heroImage').one() : null %}
+{% set fallbackMedia = contactEntry and attribute(contactEntry, 'initialBackgroundMedia') ? attribute(contactEntry, 'initialBackgroundMedia').one() : null %}
+{% set backgroundMedia = heroMedia ?: fallbackMedia %}
+{% set facebookUrl = facebookLink ? attribute(facebookLink, 'getUrl', [], 'method') : null %}
+{% set instaUrl = instaLink ? attribute(instaLink, 'getUrl', [], 'method') : null %}
+{% set facebookLabel = facebookLink ? (attribute(facebookLink, 'getLabel', [true], 'method') ?: 'Facebook') : 'Facebook' %}
+{% set instaLabel = instaLink ? (attribute(instaLink, 'getLabel', [true], 'method') ?: 'Instagram') : 'Instagram' %}
+{% set messageValues = contactSubmission and contactSubmission.message is iterable ? contactSubmission.message : {} %}
+
+<section class="contact-page{% if backgroundMedia %} contact-page--has-media{% endif %}">
+  {% if backgroundMedia %}
+    <div class="contact-page__background" aria-hidden="true">
+      {% if backgroundMedia.kind == 'video' %}
+        <video
+          class="contact-page__background-media"
+          src="{{ backgroundMedia.url }}"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        ></video>
+      {% else %}
+        <img
+          class="contact-page__background-media"
+          src="{{ backgroundMedia.url }}"
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+        >
+      {% endif %}
+    </div>
+    <div class="contact-page__background-wash" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="contact-page__grid">
+    <div class="contact-page__content">
+      <p class="contact-page__eyebrow">Get in touch</p>
+      <h1>{{ title }}</h1>
+
+      {% if introText %}
+        <div class="contact-page__text">
+          {{ introText|nl2br }}
+        </div>
+      {% endif %}
+
+      {% if emailAddress %}
+        <p class="contact-page__direct-email">
+          <a href="mailto:{{ emailAddress }}">{{ emailAddress }}</a>
+        </p>
+      {% endif %}
+
+      {% if facebookUrl or instaUrl %}
+        <div class="contact-page__socials" aria-label="Social links">
+          {% if instaUrl %}
+            <a href="{{ instaUrl }}" target="_blank" rel="noopener">{{ instaLabel }}</a>
+          {% endif %}
+          {% if facebookUrl %}
+            <a href="{{ facebookUrl }}" target="_blank" rel="noopener">{{ facebookLabel }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="contact-page__form-shell">
+      {% if craft.app.session.hasFlash('notice') %}
+        <p class="contact-form__status contact-form__status--success">
+          {{ craft.app.session.getFlash('notice') }}
+        </p>
+      {% endif %}
+
+      {% if craft.app.session.hasFlash('error') %}
+        <p class="contact-form__status contact-form__status--error">
+          {{ craft.app.session.getFlash('error') }}
+        </p>
+      {% endif %}
+
+      <form method="post" accept-charset="UTF-8" class="contact-form">
+        {{ csrfInput() }}
+        {{ actionInput('contact-form/send') }}
+        {{ redirectInput('contact') }}
+        {{ hiddenInput('subject', title) }}
+
+        <label class="contact-form__field">
+          <span>Name</span>
+          <input
+            type="text"
+            name="fromName"
+            value="{{ contactSubmission ? contactSubmission.fromName }}"
+            required
+          >
+        </label>
+
+        <label class="contact-form__field">
+          <span>Email</span>
+          <input
+            type="email"
+            name="fromEmail"
+            value="{{ contactSubmission ? contactSubmission.fromEmail }}"
+            required
+          >
+        </label>
+
+        <label class="contact-form__field">
+          <span>Telephone</span>
+          <input
+            type="tel"
+            name="message[Phone]"
+            value="{{ attribute(messageValues, 'Phone') ?? '' }}"
+          >
+        </label>
+
+        <label class="contact-form__field contact-form__field--textarea">
+          <span>Message</span>
+          <textarea
+            name="message[body]"
+            rows="8"
+            required
+          >{{ attribute(messageValues, 'body') ?? '' }}</textarea>
+        </label>
+
+        <button class="contact-form__submit" type="submit">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>

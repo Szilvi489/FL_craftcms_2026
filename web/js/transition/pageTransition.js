@@ -235,6 +235,10 @@ export function initPageTransition({ mountPage, destroyCurrentPage, getActivePag
           await exitFullscreenIfNeeded();
           const currentPageApi = getActivePageApi();
 
+          if (currentPageApi && typeof currentPageApi.beforeLeave === "function") {
+            await currentPageApi.beforeLeave();
+          }
+
           await Promise.all([
             animateNavOut(data.current.container),
             currentPageApi && typeof currentPageApi.animateLeave === "function"

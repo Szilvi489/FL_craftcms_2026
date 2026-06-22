@@ -1,0 +1,10 @@
+columnSuffix: null
+handle: email
+instructions: 'Your actual email address'
+name: Email
+searchable: false
+settings:
+  placeholder: mail@florianlechner.at
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Email

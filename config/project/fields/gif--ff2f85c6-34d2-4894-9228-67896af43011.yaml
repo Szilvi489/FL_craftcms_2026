@@ -1,15 +1,13 @@
 columnSuffix: null
-handle: blockImage
-instructions: 'Upload an image or MP4 video.'
-name: 'Image&Video'
+handle: gif
+instructions: 'Add a gif file'
+name: gif
 searchable: false
 settings:
   allowSelfRelations: false
-  allowSubfolders: true
+  allowSubfolders: false
   allowUploads: true
-  allowedKinds:
-    - image
-    - video
+  allowedKinds: null
   branchLimit: null
   defaultPlacement: end
   defaultUploadLocationSource: 'volume:a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d' # Project Media
@@ -18,21 +16,20 @@ settings:
   maxRelations: 1
   minRelations: 1
   previewMode: full
-  restrictFiles: true
+  restrictFiles: false
   restrictLocation: false
   restrictedDefaultUploadSubpath: null
   restrictedLocationSource: 'volume:a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d' # Project Media
   restrictedLocationSubpath: null
-  selectionLabel: 'Add media'
+  selectionLabel: null
   showSearchInput: true
   showSiteMenu: true
   showUnpermittedFiles: false
   showUnpermittedVolumes: false
-  sources:
-    - 'volume:a73c3bd0-66d2-45f4-8f4a-e5c9fef3ec9d' # Project Media
+  sources: '*'
   targetSiteId: null
   validateRelatedElements: false
-  viewMode: cards
+  viewMode: thumbs
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Assets

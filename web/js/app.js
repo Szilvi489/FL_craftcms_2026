@@ -1,9 +1,10 @@
-import { initSiteUI } from "./scripts.js";
-import { initHomeHero } from "./home/homeHero.js";
-import { initIndexPage } from "./index/indexPage.js";
-import { initProjectPage } from "./project/project.js";
-import { init404Gallery } from "./404/404Gallery.js";
-import { initPageTransition } from "./transition/pageTransition.js";
+import { initSiteUI } from "./scripts.js?v=10";
+import { initHomeHero } from "./home/homeHero.js?v=9";
+import { initIndexPage } from "./index/indexPage.js?v=3";
+import { initProjectPage } from "./project/project.js?v=5";
+import { init404Gallery } from "./404/404Gallery.js?v=2";
+import { initPageTransition } from "./transition/pageTransition.js?v=3";
+import { initCustomCursor } from "./customCursor.js?v=2";
 
 const pageInitializers = {
   home: initHomeHero,
@@ -57,6 +58,7 @@ const mountPage = (container) => {
 
 const initialContainer = document.querySelector('[data-barba="container"]');
 const initialNamespace = getContainerNamespace(initialContainer);
+initCustomCursor();
 const initialPageApi = mountPage(initialContainer);
 
 if (

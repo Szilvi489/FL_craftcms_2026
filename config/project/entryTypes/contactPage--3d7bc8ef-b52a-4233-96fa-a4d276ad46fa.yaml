@@ -1,0 +1,166 @@
+allowLineBreaksInTitles: false
+color: null
+description: 'add details to your contact page'
+fieldLayouts:
+  ec3f119b-4019-48ec-b785-95d18f6e649e:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3c97cebf-a126-4d9a-b681-f07555f654c8 # Initial Background Media
+            handle: null
+            instructions: null
+            label: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 521a2746-f1da-446f-8b7f-7e9e36faa144
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2026-05-11T18:39:10+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 6b83cb34-5a65-4a5e-8597-db2c7b2aec18
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 9c28928f-b9f7-4776-ae69-e62da16e7bb3 # Email
+            handle: null
+            instructions: null
+            label: null
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ce970bbc-7e67-416c-80f1-490ab456011f
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3e8fa2f9-3aad-425f-8796-df0d3fd6a4e0 # Facebook Link
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 02162053-97b8-419a-8114-35c5138c675d
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 5b385bdf-f28b-4f53-beab-c2c5cb51c4dc # Insta Link
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: fd15e946-98e8-4311-be92-b90b3c5bd41e
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 8d8e6f92-d122-47c2-b662-e62fc423eeb4 # Text
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: b0958392-c98c-4d13-b7de-d78eecb32b82
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4d45c449-648c-43d4-b7c2-0dc057e89950 # Hero Image
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 90d959a4-a661-4ea8-bcf5-7f68cffb0014
+            userCondition: null
+            warning: null
+            width: 75
+          -
+            dateAdded: '2026-05-11T18:43:57+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: e0967947-c575-468b-a978-14260dcaf746 # Image Size
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 7725c8c1-c583-477b-8b19-353869c1d3fa
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 46029dd9-05ef-45a1-9eed-6cb9f56b6c4e
+        userCondition: null
+    thumbFieldKey: null
+handle: contactPage
+hasTitleField: true
+icon: contao
+name: 'Contact Page Details'
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

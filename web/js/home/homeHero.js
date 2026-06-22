@@ -2,16 +2,28 @@ export function initHomeHero(root = document) {
   const body = document.body;
   const abortController = new AbortController();
   const { signal } = abortController;
+  const homeRevealApiKey = "__siteHomeReveal";
   const hero = root.querySelector(".home-hero");
   const hole = hero?.querySelector(".home-hero__hole");
   const introTitle = hero?.querySelector(".intro-title");
   const homeLink = root.querySelector(".site-home-link");
   const siteNav = root.querySelector(".site-nav");
+  const selectedWorkSection = root.querySelector("[data-home-selected-work]");
+  const selectedWorkHeading = selectedWorkSection?.querySelector(".home-selected-work__header");
+  const selectedWorkCards = Array.from(root.querySelectorAll("[data-home-work-card]"));
+  const slideshows = Array.from(root.querySelectorAll("[data-home-card-slideshow]"));
+  const cardVideos = Array.from(root.querySelectorAll("[data-home-card-video]"));
   const navItems = siteNav ? [siteNav] : [];
   const navRevealStart = 0.72;
+  const navRevealDuration = 0.18;
   const homeRevealHash = "#home-reveal";
-  const homeRevealProgress = 0.995;
+  const homeRevealScrollDuration = 1.05;
+  // Return to the first fully revealed hero/nav state, not the later hero-exit state.
+  const homeRevealProgress = Math.min(1, navRevealStart + navRevealDuration + 0.02);
   let heroTimeline = null;
+  let selectedWorkTimeline = null;
+  const slideIntervals = [];
+  const homeRevealScrollState = { y: window.scrollY };
 
   const waitForFrames = (count = 1) => new Promise((resolve) => {
     const step = () => {
@@ -39,25 +51,53 @@ export function initHomeHero(root = document) {
     body.classList.toggle("home-nav-revealed", revealed);
   };
 
+  const setNavRevealState = (progress) => {
+    const revealed = progress >= navRevealStart;
+    setNavRevealed(revealed);
+
+    if (!revealed) {
+      siteNav?.classList.remove("is-hidden-by-scroll");
+    }
+  };
+
   const destroy = () => {
     abortController.abort();
     setNavRevealed(false);
+    if (window[homeRevealApiKey]) {
+      delete window[homeRevealApiKey];
+    }
+    slideIntervals.splice(0).forEach((intervalId) => {
+      window.clearInterval(intervalId);
+    });
 
     if (heroTimeline?.scrollTrigger) {
       heroTimeline.scrollTrigger.kill();
+    }
+
+    if (selectedWorkTimeline?.scrollTrigger) {
+      selectedWorkTimeline.scrollTrigger.kill();
     }
 
     if (heroTimeline) {
       heroTimeline.kill();
     }
 
+    if (selectedWorkTimeline) {
+      selectedWorkTimeline.kill();
+    }
+
     if (window.gsap) {
       window.gsap.killTweensOf(navItems);
       window.gsap.killTweensOf(hole);
       window.gsap.killTweensOf(introTitle);
+      window.gsap.killTweensOf(homeRevealScrollState);
+      window.gsap.killTweensOf(selectedWorkCards);
+      window.gsap.killTweensOf(selectedWorkHeading);
       window.gsap.set(navItems, { clearProps: "opacity,visibility,transform" });
       window.gsap.set(hole, { clearProps: "transform" });
       window.gsap.set(introTitle, { clearProps: "opacity,visibility,transform" });
+      window.gsap.set(selectedWorkCards, { clearProps: "opacity,visibility,transform" });
+      window.gsap.set(selectedWorkHeading, { clearProps: "opacity,visibility,transform" });
     }
   };
 
@@ -75,9 +115,22 @@ export function initHomeHero(root = document) {
   const { ScrollTrigger } = window;
 
   gsap.registerPlugin(ScrollTrigger);
-  gsap.set(navItems, {
-    autoAlpha: 0,
-    y: -24,
+
+  const tweenWindowScrollTo = (targetY, duration = homeRevealScrollDuration) => new Promise((resolve) => {
+    homeRevealScrollState.y = window.scrollY;
+    gsap.killTweensOf(homeRevealScrollState);
+    gsap.to(homeRevealScrollState, {
+      y: targetY,
+      duration,
+      ease: "power2.inOut",
+      overwrite: true,
+      onUpdate: () => {
+        window.scrollTo(0, homeRevealScrollState.y);
+        ScrollTrigger.update();
+      },
+      onComplete: resolve,
+      onInterrupt: resolve,
+    });
   });
 
   const scaleToCoverViewport = () => {
@@ -96,16 +149,92 @@ export function initHomeHero(root = document) {
     return Math.max(1, (maxDistance * 2) / rect.width);
   };
 
-  const centerNavRowInViewport = () => {
+  const getCenteredNavOffset = () => {
     const currentY = Number(gsap.getProperty(siteNav, "y")) || 0;
     gsap.set(siteNav, { y: 0 });
     const rect = siteNav.getBoundingClientRect();
     gsap.set(siteNav, { y: currentY });
-    const currentCenter = rect.top + rect.height / 2;
-    const targetCenter = window.innerHeight / 2;
-
-    return targetCenter - currentCenter;
+    return rect.height / -2;
   };
+
+  const getHiddenNavOffset = () => getCenteredNavOffset() - 24;
+
+  const initSlideshows = () => {
+    slideshows.forEach((slideshow) => {
+      const frames = Array.from(slideshow.querySelectorAll("[data-home-card-frame]"));
+
+      if (frames.length <= 1) {
+        return;
+      }
+
+      let activeIndex = 0;
+      const speed = Math.max(Number.parseInt(slideshow.dataset.homeCardSpeed || "1600", 10) || 1600, 120);
+
+      const intervalId = window.setInterval(() => {
+        frames[activeIndex]?.classList.remove("is-active");
+        activeIndex = (activeIndex + 1) % frames.length;
+        frames[activeIndex]?.classList.add("is-active");
+      }, speed);
+
+      slideIntervals.push(intervalId);
+    });
+  };
+
+  const initCardVideos = () => {
+    cardVideos.forEach((video) => {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+
+      const playVideo = () => {
+        const playPromise = video.play();
+
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(() => {});
+        }
+      };
+
+      if (video.readyState >= 2) {
+        playVideo();
+      } else {
+        video.addEventListener("loadeddata", playVideo, { once: true, signal });
+      }
+    });
+  };
+
+  const initSelectedWorkReveal = () => {
+    if (!selectedWorkSection || (!selectedWorkHeading && !selectedWorkCards.length)) {
+      return;
+    }
+
+    const revealTargets = [selectedWorkHeading, ...selectedWorkCards].filter(Boolean);
+
+    gsap.set(revealTargets, {
+      autoAlpha: 0,
+      y: 48,
+    });
+
+    selectedWorkTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: selectedWorkSection,
+        start: "top 60%",
+        once: true,
+      },
+    });
+
+    selectedWorkTimeline.to(revealTargets, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.9,
+      stagger: 0.08,
+      ease: "power2.out",
+    });
+  };
+
+  gsap.set(navItems, {
+    autoAlpha: 0,
+    y: getHiddenNavOffset,
+  });
 
   heroTimeline = gsap.timeline({
     scrollTrigger: {
@@ -117,7 +246,10 @@ export function initHomeHero(root = document) {
       anticipatePin: 1,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        setNavRevealed(self.progress >= navRevealStart);
+        setNavRevealState(self.progress);
+      },
+      onRefresh: (self) => {
+        setNavRevealState(self.progress);
       },
     },
   });
@@ -137,10 +269,14 @@ export function initHomeHero(root = document) {
 
   heroTimeline.to(navItems, {
     autoAlpha: 1,
-    y: centerNavRowInViewport,
+    y: getCenteredNavOffset,
     ease: "none",
-    duration: 0.58,
-  }, 0.22);
+    duration: navRevealDuration,
+  }, navRevealStart);
+
+  initSlideshows();
+  initCardVideos();
+  initSelectedWorkReveal();
 
   const getHomeRevealScrollTop = () => {
     const trigger = heroTimeline?.scrollTrigger;
@@ -152,17 +288,26 @@ export function initHomeHero(root = document) {
     return trigger.start + ((trigger.end - trigger.start) * homeRevealProgress);
   };
 
-  const scrollToHomeReveal = (behavior) => {
+  const scrollToHomeReveal = async (behavior) => {
+    const targetY = getHomeRevealScrollTop();
+
+    if (behavior === "smooth") {
+      await tweenWindowScrollTo(targetY);
+      return targetY;
+    }
+
     window.scrollTo({
-      top: getHomeRevealScrollTop(),
+      top: targetY,
       behavior,
     });
+
+    return targetY;
   };
 
-  const reveal = async () => {
+  const reveal = async (behavior = "auto") => {
     ScrollTrigger.refresh();
     await waitForFrames(1);
-    scrollToHomeReveal("auto");
+    await scrollToHomeReveal(behavior);
     ScrollTrigger.update();
     await waitForFrames(2);
     ScrollTrigger.refresh();
@@ -174,13 +319,13 @@ export function initHomeHero(root = document) {
   const prepareRevealForTransition = async () => {
     ScrollTrigger.refresh();
     await waitForFrames(1);
-    scrollToHomeReveal("auto");
+    await scrollToHomeReveal("auto");
     ScrollTrigger.update();
     await waitForFrames(2);
     ScrollTrigger.refresh();
     ScrollTrigger.update();
 
-    const revealY = centerNavRowInViewport();
+    const revealY = getCenteredNavOffset();
     const holeScale = scaleToCoverViewport();
     gsap.set(hole, {
       scale: holeScale,
@@ -190,24 +335,22 @@ export function initHomeHero(root = document) {
       y: -650,
     });
     setNavRevealed(true);
-    gsap.killTweensOf(navItems);
     gsap.set(navItems, {
       autoAlpha: 0,
-      y: revealY - 24,
+      y: getHiddenNavOffset(),
     });
 
     return true;
   };
 
   const animateNavIntoReveal = async () => {
-    scrollToHomeReveal("auto");
+    await scrollToHomeReveal("auto");
     ScrollTrigger.update();
-    const revealY = centerNavRowInViewport();
+    const revealY = getCenteredNavOffset();
     setNavRevealed(true);
-    gsap.killTweensOf(navItems);
     gsap.set(navItems, {
       autoAlpha: 0,
-      y: revealY - 24,
+      y: getHiddenNavOffset(),
     });
 
     await tweenTo(navItems, {
@@ -223,12 +366,12 @@ export function initHomeHero(root = document) {
     setNavRevealed(true);
     gsap.set(navItems, {
       autoAlpha: 1,
-      y: centerNavRowInViewport(),
+      y: getCenteredNavOffset(),
     });
   };
 
   if (homeLink && window.location.pathname === new URL(homeLink.href, window.location.href).pathname) {
-    homeLink.addEventListener("click", (event) => {
+    homeLink.addEventListener("click", async (event) => {
       const targetUrl = new URL(homeLink.href, window.location.href);
       const isSameDocument = (
         targetUrl.pathname === window.location.pathname &&
@@ -240,11 +383,12 @@ export function initHomeHero(root = document) {
       }
 
       event.preventDefault();
-      ScrollTrigger.refresh();
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${homeRevealHash}`);
-      scrollToHomeReveal("smooth");
+      await reveal("smooth");
     }, { signal });
   }
+
+  window[homeRevealApiKey] = (behavior = "smooth") => reveal(behavior);
 
   return {
     destroy,

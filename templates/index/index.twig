@@ -2,7 +2,7 @@
 
 {% block barbaNamespace %}index{% endblock %}
 {% block navLayout %}fl-fullscreen{% endblock %}
-{% block navTheme %}dynamic-inverse{% endblock %}
+{% block navTheme %}black{% endblock %}
 {% block navBackHref %}{{ siteUrl }}#home-reveal{% endblock %}
 {% block title %}Index - {{ siteName }}{% endblock %}
 
@@ -77,26 +77,28 @@
           <span>Year</span>
         </div>
 
-        {% for project in projects %}
-          {% set previewMedia = project.heroImage.one() %}
-          {% if not previewMedia and project.projectBlocks is defined %}
-            {% set firstImageBlock = project.projectBlocks.type('imageBlock').one() %}
-            {% set previewMedia = firstImageBlock ? firstImageBlock.blockImage.one() : null %}
-          {% endif %}
+        <div class="project-list__body">
+          {% for project in projects %}
+            {% set previewMedia = project.heroImage.one() %}
+            {% if not previewMedia and project.projectBlocks is defined %}
+              {% set firstImageBlock = project.projectBlocks.type('imageBlock').one() %}
+              {% set previewMedia = firstImageBlock ? firstImageBlock.blockImage.one() : null %}
+            {% endif %}
 
-          <a
-            class="project-row"
-            href="/{{ project.uri }}"
-            {% if previewMedia %}data-preview-key="project-{{ project.id }}"{% endif %}
-          >
-            <span>{{ project.title }}</span>
-            <span>{{ project.projectType ?: '' }}</span>
-            <span>{{ project.client ?: '' }}</span>
-            <span>{{ project.projectYear ?: '' }}</span>
-          </a>
-        {% else %}
-          <p>No projects have been added yet.</p>
-        {% endfor %}
+            <a
+              class="project-row"
+              href="/{{ project.uri }}"
+              {% if previewMedia %}data-preview-key="project-{{ project.id }}"{% endif %}
+            >
+              <span>{{ project.title }}</span>
+              <span>{{ project.projectType ?: '' }}</span>
+              <span>{{ project.client ?: '' }}</span>
+              <span>{{ project.projectYear ?: '' }}</span>
+            </a>
+          {% else %}
+            <p>No projects have been added yet.</p>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

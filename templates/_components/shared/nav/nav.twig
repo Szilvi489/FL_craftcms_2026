@@ -15,9 +15,9 @@
     <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-info-panel">
       Info
     </button>
-    <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-contact-panel">
+    <a class="site-nav__link" href="/contact">
       Contact
-    </button>
+    </a>
   {% endif %}
   <a class="site-home-link site-nav__link" href="{{ siteUrl }}#home-reveal" aria-label="Home">FL</a>
   {% if navLayout|default('full') == 'fl-fullscreen' %}
@@ -59,12 +59,6 @@
 <section class="site-info-panel" id="site-info-panel" aria-hidden="true">
   <div class="site-info-panel__inner">
     {% include "_components/info.twig" %}
-  </div>
-</section>
-
-<section class="site-contact-panel" id="site-contact-panel" aria-hidden="true">
-  <div class="site-contact-panel__inner">
-    {% include "_components/contact.twig" %}
   </div>
 </section>
 

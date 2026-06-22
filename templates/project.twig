@@ -7,21 +7,23 @@
 {% block content %}
 {% set heroMedia = entry.heroImage.one() %}
 <article class="project">
-  <header class="project-intro" aria-label="Project introduction" {% if entry.heroImage %} data-default-preview-key="hero-image"{% endif %}>
+  <header class="project-intro{% if heroMedia %} project-intro--has-background{% endif %}" aria-label="Project introduction" {% if entry.heroImage %} data-default-preview-key="hero-image"{% endif %}>
     {% if heroMedia %}
       <div class="project-intro__background" aria-hidden="true">
-        {% if heroMedia.kind == 'video' %}
-          <video
-            src="{{ heroMedia.url }}"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-          ></video>
-        {% else %}
-          <img src="{{ heroMedia.url }}" alt="">
-        {% endif %}
+        <div class="project-intro__background-frame">
+          {% if heroMedia.kind == 'video' %}
+            <video
+              src="{{ heroMedia.url }}"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+            ></video>
+          {% else %}
+            <img src="{{ heroMedia.url }}" alt="">
+          {% endif %}
+        </div>
       </div>
     {% endif %}
 

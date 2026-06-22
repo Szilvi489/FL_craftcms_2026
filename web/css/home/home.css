@@ -85,3 +85,119 @@ body.home-nav-revealed .site-nav--behavior-home-reveal {
   font-size: clamp(1rem, 2.2vw, 2rem);
   line-height: 1;
 }
+
+.home-selected-work {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg);
+  padding: clamp(2rem, 5vw, 4rem) 3.5vw 5rem;
+}
+
+.home-selected-work__header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.home-selected-work__header h2 {
+  margin: 0;
+  font-size: clamp(1.15rem, 1.6vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.home-selected-work__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--home-selected-work-columns, 3), minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.4vw, 1.3rem);
+  align-items: start;
+}
+
+.home-selected-work__column {
+  display: grid;
+  gap: clamp(1.2rem, 2vw, 1.8rem);
+  align-content: start;
+}
+
+.home-work-card {
+  width: 100%;
+  margin: 0;
+}
+
+.home-work-card__media {
+  position: relative;
+  overflow: hidden;
+  background: #f2f2f2;
+}
+
+.home-work-card__media-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-work-card__media img,
+.home-work-card__media video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.home-work-card__slideshow {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+
+.home-work-card__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.home-work-card__slide.is-active {
+  opacity: 1;
+}
+
+.home-work-card__text {
+  display: grid;
+  gap: 0.15rem;
+  padding-top: 0.55rem;
+}
+
+.home-work-card__text h3,
+.home-work-card__text p {
+  margin: 0;
+}
+
+.home-work-card__text h3 {
+  font-size: clamp(1.25rem, 1.65vw, 1.9rem);
+  font-weight: 500;
+  line-height: 1.02;
+}
+
+.home-work-card__text p {
+  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  line-height: 1.15;
+}
+
+@media (max-width: 1100px) {
+  .home-selected-work__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .home-selected-work {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .home-selected-work__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

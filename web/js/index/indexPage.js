@@ -3,7 +3,7 @@ export function initIndexPage(root = document) {
   const { signal } = abortController;
   const { gsap } = window;
   const pageRoot = root.querySelector(".projects-index");
-  const desktopList = root.querySelector(".project-list");
+  const desktopList = root.querySelector(".project-list__body");
   const desktopBackground = root.querySelector(".projects-index__background");
   const mobileBackground = root.querySelector(".projects-index__mobile-background");
   const desktopBackgroundItems = Array.from(root.querySelectorAll(".projects-index__background-item"));
@@ -43,7 +43,7 @@ export function initIndexPage(root = document) {
     });
   };
 
-  const syncVideos = (items, activeItem) => {
+  const syncVideos = (items, activeItem, shouldPlayActiveVideo = true) => {
     items.forEach((item) => {
       const video = item.querySelector("video");
 
@@ -56,14 +56,18 @@ export function initIndexPage(root = document) {
           video.currentTime = 0;
         }
 
-        video.play().catch(() => {});
+        if (shouldPlayActiveVideo) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
       } else {
         video.pause();
       }
     });
   };
 
-  const createPreviewController = (items, defaultKey = "") => {
+  const createPreviewController = (items, defaultKey = "", shouldPlayActiveVideo = true) => {
     if (!items.length) {
       return null;
     }
@@ -83,13 +87,13 @@ export function initIndexPage(root = document) {
         activeItem.classList.add("is-active");
       }
 
-      syncVideos(items, activeItem);
+      syncVideos(items, activeItem, shouldPlayActiveVideo);
     };
 
     if (defaultKey) {
       setActiveItem(defaultKey);
     } else {
-      syncVideos(items, activeItem);
+      syncVideos(items, activeItem, shouldPlayActiveVideo);
     }
 
     return {
@@ -99,14 +103,15 @@ export function initIndexPage(root = document) {
       },
       destroy() {
         items.forEach((item) => item.classList.remove("is-active"));
-        syncVideos(items, null);
+        syncVideos(items, null, shouldPlayActiveVideo);
       },
     };
   };
 
   const desktopController = createPreviewController(
     desktopBackgroundItems,
-    desktopBackground?.dataset.defaultPreviewKey || ""
+    desktopBackground?.dataset.defaultPreviewKey || "",
+    false
   );
   const mobileController = createPreviewController(
     mobileBackgroundItems,

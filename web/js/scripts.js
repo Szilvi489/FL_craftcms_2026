@@ -4,12 +4,172 @@ export function initSiteUI(root = document) {
   const fullscreenToggles = Array.from(root.querySelectorAll(".site-fullscreen-toggle"));
   const toggles = Array.from(root.querySelectorAll(".site-panel-toggle"));
   const siteNav = root.querySelector(".site-nav");
+  const homeHero = root.querySelector(".home-hero");
+  let pairs = [];
   let originalNavTop = null;
+  let activeHomeTrackedPanel = null;
+  let lastScrollY = window.scrollY;
+  let isNavHiddenByScroll = false;
+  let isScrollTicking = false;
+  const NAV_HIDE_TRIGGER_Y = 72;
+  const NAV_SCROLL_DELTA = 8;
+  const HOME_NAV_EDGE_OFFSET_REM = 5;
+  const HOME_TRACKED_PANEL_FADE_DISTANCE = 220;
 
   const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
   const canEnterFullscreen = () => Boolean(
     document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen
   );
+  const revealHomeHero = (behavior = "smooth") => {
+    if (
+      !siteNav ||
+      !siteNav.classList.contains("site-nav--behavior-home-reveal") ||
+      typeof window.__siteHomeReveal !== "function"
+    ) {
+      return Promise.resolve(false);
+    }
+
+    return window.__siteHomeReveal(behavior);
+  };
+  const hasOpenPanel = () => pairs.some(({ panel }) => panel.classList.contains("is-open"));
+  const hasScrollablePage = () => (document.documentElement.scrollHeight - window.innerHeight) > 8;
+  const getRootRemPx = () => Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
+  const isHomeRevealNav = () => Boolean(siteNav?.classList.contains("site-nav--behavior-home-reveal"));
+  const isTrackedPanel = (panel) => panel?.matches?.(".site-info-panel, .site-imprint-panel, .site-privacy-panel") || false;
+  const isTrackedHomePanel = (panel) => isHomeRevealNav() && isTrackedPanel(panel);
+  const hasBlockingHomeRevealPanel = () => pairs.some(({ panel }) => (
+    panel.classList.contains("is-open") &&
+    !isTrackedHomePanel(panel)
+  ));
+
+  const resetHomeTrackedPanelState = (panel = activeHomeTrackedPanel?.panel) => {
+    if (!panel) {
+      activeHomeTrackedPanel = null;
+      return;
+    }
+
+    panel.classList.remove("is-home-tracked-panel", "is-scroll-fading");
+    panel.style.removeProperty("--site-home-panel-opacity");
+    activeHomeTrackedPanel = activeHomeTrackedPanel?.panel === panel ? null : activeHomeTrackedPanel;
+  };
+
+  const syncHomeTrackedPanelFade = () => {
+    if (!activeHomeTrackedPanel?.panel) {
+      return false;
+    }
+
+    const distance = Math.max(0, window.scrollY - activeHomeTrackedPanel.anchorScrollY);
+    const progress = Math.min(distance / HOME_TRACKED_PANEL_FADE_DISTANCE, 1);
+    const opacity = Math.max(0, 1 - progress);
+
+    activeHomeTrackedPanel.panel.style.setProperty("--site-home-panel-opacity", opacity.toFixed(3));
+    activeHomeTrackedPanel.panel.classList.toggle("is-scroll-fading", progress > 0);
+
+    return progress >= 1;
+  };
+
+  const setNavHiddenByScroll = (hidden) => {
+    if (!siteNav || isNavHiddenByScroll === hidden) {
+      return;
+    }
+
+    isNavHiddenByScroll = hidden;
+    siteNav.classList.add("site-nav--scroll-aware");
+    siteNav.classList.toggle("is-hidden-by-scroll", hidden);
+  };
+
+  const syncHomeRevealNavPosition = () => {
+    if (
+      !siteNav ||
+      !homeHero ||
+      !siteNav.classList.contains("site-nav--behavior-home-reveal") ||
+      !document.body.classList.contains("home-nav-revealed") ||
+      hasBlockingHomeRevealPanel()
+    ) {
+      if (siteNav?.classList.contains("site-nav--behavior-home-reveal")) {
+        siteNav.style.top = "";
+      }
+      return false;
+    }
+
+    const heroBottom = homeHero.getBoundingClientRect().bottom;
+    const navHeight = siteNav.getBoundingClientRect().height;
+    const edgeOffset = getRootRemPx() * HOME_NAV_EDGE_OFFSET_REM;
+    const centeredNavBottom = (window.innerHeight / 2) + (navHeight / 2);
+    const safeHeroBottom = heroBottom - edgeOffset;
+
+    if (safeHeroBottom <= centeredNavBottom) {
+      siteNav.style.top = `${safeHeroBottom - (navHeight / 2)}px`;
+      return true;
+    }
+
+    siteNav.style.top = "";
+    return false;
+  };
+
+  const canAutoHideNav = () => {
+    if (!siteNav || !hasScrollablePage() || hasOpenPanel()) {
+      return false;
+    }
+
+    if (document.documentElement.classList.contains("is-barba-transitioning")) {
+      return false;
+    }
+
+    if (siteNav.classList.contains("site-nav--behavior-home-reveal")) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const syncNavOnScroll = () => {
+    if (!siteNav) {
+      return;
+    }
+
+    const currentScrollY = window.scrollY;
+
+    if (syncHomeTrackedPanelFade()) {
+      closeAll();
+      lastScrollY = currentScrollY;
+      return;
+    }
+
+    const isTrackingHomeExit = syncHomeRevealNavPosition();
+
+    if (isTrackingHomeExit) {
+      setNavHiddenByScroll(false);
+      lastScrollY = currentScrollY;
+      return;
+    }
+
+    if (!canAutoHideNav() || currentScrollY <= NAV_HIDE_TRIGGER_Y) {
+      setNavHiddenByScroll(false);
+      lastScrollY = currentScrollY;
+      return;
+    }
+
+    if (currentScrollY > lastScrollY + NAV_SCROLL_DELTA) {
+      setNavHiddenByScroll(true);
+    } else if (currentScrollY < lastScrollY - NAV_SCROLL_DELTA) {
+      setNavHiddenByScroll(false);
+    }
+
+    lastScrollY = currentScrollY;
+  };
+
+  const handleWindowScroll = () => {
+    if (isScrollTicking) {
+      return;
+    }
+
+    isScrollTicking = true;
+    window.requestAnimationFrame(() => {
+      syncNavOnScroll();
+      isScrollTicking = false;
+    });
+  };
 
   const syncFullscreenButtons = () => {
     if (!fullscreenToggles.length) {
@@ -59,13 +219,23 @@ export function initSiteUI(root = document) {
     }
   }
 
+  if (siteNav) {
+    siteNav.classList.add("site-nav--scroll-aware");
+    syncNavOnScroll();
+    window.addEventListener("scroll", handleWindowScroll, { passive: true, signal });
+    window.addEventListener("resize", syncNavOnScroll, { signal });
+  }
+
   if (!toggles.length) {
     return () => {
+      if (siteNav) {
+        siteNav.classList.remove("site-nav--scroll-aware", "is-hidden-by-scroll");
+      }
       abortController.abort();
     };
   }
 
-  const pairs = toggles
+  pairs = toggles
     .map((toggle) => {
       const panelId = toggle.getAttribute("aria-controls");
       const panel = panelId ? root.querySelector(`#${panelId}`) : null;
@@ -117,17 +287,21 @@ export function initSiteUI(root = document) {
       toggle.setAttribute("aria-expanded", "false");
       panel.setAttribute("aria-hidden", "true");
       panel.classList.remove("is-open");
+      resetHomeTrackedPanelState(panel);
     });
 
     resetNavPosition();
+    syncNavOnScroll();
   };
 
-  const setOpen = (selectedToggle, open) => {
+  const setOpen = async (selectedToggle, open) => {
     closeAll();
 
     if (!open) {
       return;
     }
+
+    await revealHomeHero("smooth");
 
     const selectedPair = pairs.find(({ toggle }) => toggle === selectedToggle);
 
@@ -138,12 +312,25 @@ export function initSiteUI(root = document) {
     selectedPair.toggle.setAttribute("aria-expanded", "true");
     selectedPair.panel.setAttribute("aria-hidden", "false");
     selectedPair.panel.classList.add("is-open");
+    setNavHiddenByScroll(false);
+
+    if (isTrackedHomePanel(selectedPair.panel)) {
+      activeHomeTrackedPanel = {
+        panel: selectedPair.panel,
+        anchorScrollY: window.scrollY,
+      };
+      selectedPair.panel.classList.add("is-home-tracked-panel");
+      selectedPair.panel.style.setProperty("--site-home-panel-opacity", "1");
+      syncNavOnScroll();
+      return;
+    }
+
     moveNavIntoView();
   };
 
   pairs.forEach(({ toggle, panel }) => {
-    toggle.addEventListener("click", () => {
-      setOpen(toggle, !panel.classList.contains("is-open"));
+    toggle.addEventListener("click", async () => {
+      await setOpen(toggle, !panel.classList.contains("is-open"));
     }, { signal });
   });
 
@@ -163,7 +350,15 @@ export function initSiteUI(root = document) {
   }, { signal });
 
   window.addEventListener("resize", () => {
-    if (!pairs.some(({ panel }) => panel.classList.contains("is-open"))) {
+    const openPair = pairs.find(({ panel }) => panel.classList.contains("is-open"));
+
+    if (!openPair) {
+      syncNavOnScroll();
+      return;
+    }
+
+    if (isTrackedHomePanel(openPair.panel)) {
+      syncNavOnScroll();
       return;
     }
 
@@ -177,6 +372,9 @@ export function initSiteUI(root = document) {
 
   return () => {
     closeAll();
+    if (siteNav) {
+      siteNav.classList.remove("site-nav--scroll-aware", "is-hidden-by-scroll");
+    }
     abortController.abort();
   };
 }

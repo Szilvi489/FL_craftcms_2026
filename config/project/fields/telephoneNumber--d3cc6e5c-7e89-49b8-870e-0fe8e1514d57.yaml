@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: telephoneNumber
+instructions: 'Your telephone number'
+name: 'Telephone Number'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: true
+  initialRows: 4
+  multiline: false
+  placeholder: +43676....
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText
