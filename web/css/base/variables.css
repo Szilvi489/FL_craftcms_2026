@@ -43,10 +43,10 @@
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.12);
 
   /* Motion */
-  --easing-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --duration-fast: 150ms;
-  --duration-base: 250ms;
-  --duration-slow: 400ms;
+  --easing-standard: cubic-bezier(0.24, 0.72, 0.24, 1);
+  --duration-fast: 180ms;
+  --duration-base: 360ms;
+  --duration-slow: 560ms;
 
   /* Layer */
   --z-base: 0;

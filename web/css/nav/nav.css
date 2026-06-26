@@ -19,15 +19,17 @@
 .site-nav {
   position: fixed;
   z-index: 60;
-  transition: opacity 180ms ease, top 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition:
+    opacity var(--duration-fast) ease,
+    top var(--duration-base) var(--easing-standard);
 }
 
 .site-nav--scroll-aware {
   will-change: transform;
   transition:
-    transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 180ms ease,
-    top 10ms cubic-bezier(0.5, 0.16, 0.45, 0.94);
+    transform var(--duration-base) var(--easing-standard),
+    opacity var(--duration-fast) ease,
+    top var(--duration-fast) var(--easing-standard);
 }
 
 .site-nav--scroll-aware.is-hidden-by-scroll {
@@ -76,6 +78,7 @@
   width: auto;
 }
 
+.site-nav--layout-contact,
 .site-nav--layout-fl-fullscreen {
   left: 1rem;
   right: 1rem;
@@ -100,7 +103,10 @@
   width: 1.75rem;
   height: 1.75rem;
   border: 1px solid currentColor;
-  transition: background-color 180ms ease, border-color 180ms ease;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    transform var(--duration-base) var(--easing-standard);
 }
 
 .site-back-link__icon-svg {
@@ -108,7 +114,10 @@
   height: 1rem;
   opacity: 0;
   transform: translateX(0.12rem);
-  transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
+  transition:
+    opacity var(--duration-fast) ease,
+    transform var(--duration-base) var(--easing-standard),
+    color var(--duration-fast) ease;
 }
 
 .site-back-link:hover .site-back-link__icon,
@@ -159,7 +168,10 @@
   width: 1.75rem;
   height: 1.75rem;
   border: 1px solid currentColor;
-  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    transform var(--duration-base) var(--easing-standard);
 }
 
 .site-fullscreen-toggle__icon,
@@ -167,7 +179,10 @@
   position: absolute;
   width: 1.35rem;
   height: 1.35rem;
-  transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
+  transition:
+    opacity var(--duration-fast) ease,
+    transform var(--duration-base) var(--easing-standard),
+    color var(--duration-fast) ease;
 }
 
 .site-fullscreen-toggle__icon {
@@ -203,17 +218,66 @@
 }
 
 .site-nav--layout-home-only .site-home-link,
+.site-nav--layout-contact .site-home-link,
 .site-nav--layout-fl-fullscreen .site-home-link {
   position: relative;
   z-index: 1;
 }
 
 .site-nav--layout-home-only .site-back-link,
+.site-nav--layout-contact .site-back-link,
 .site-nav--layout-fl-fullscreen .site-back-link {
   position: absolute;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
+}
+
+.site-contact-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: inherit;
+}
+
+.site-contact-toggle__frame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid currentColor;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    transform var(--duration-base) var(--easing-standard);
+}
+
+.site-contact-toggle__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  transition:
+    color var(--duration-fast) ease,
+    transform var(--duration-base) var(--easing-standard);
+}
+
+.site-contact-toggle:hover .site-contact-toggle__frame,
+.site-contact-toggle:focus-visible .site-contact-toggle__frame,
+.site-contact-toggle[aria-expanded="true"] .site-contact-toggle__frame {
+  background-color: currentColor;
+  transform: scale(0.96);
+}
+
+.site-contact-toggle:hover .site-contact-toggle__icon,
+.site-contact-toggle:focus-visible .site-contact-toggle__icon,
+.site-contact-toggle[aria-expanded="true"] .site-contact-toggle__icon {
+  color: var(--site-nav-fill-contrast);
 }
 
 .site-nav--layout-fl-fullscreen .site-fullscreen-toggle {
@@ -259,6 +323,7 @@
     right: 0.85rem;
   }
 
+  .site-nav--layout-contact,
   .site-nav--layout-fl-fullscreen {
     left: 0.85rem;
     right: 0.85rem;
@@ -276,6 +341,21 @@
   .site-fullscreen-toggle {
     width: 1.5rem;
     height: 1.5rem;
+  }
+
+  .site-contact-toggle {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .site-contact-toggle__frame {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .site-contact-toggle__icon {
+    width: 1rem;
+    height: 1rem;
   }
 
   .site-fullscreen-toggle__frame {

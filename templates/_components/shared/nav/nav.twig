@@ -1,4 +1,7 @@
-<nav class="site-nav site-nav--layout-{{ navLayout|default('full') }} site-nav--theme-{{ navTheme|default('black') }} site-nav--behavior-{{ navBehavior|default('static') }}" aria-label="Primary">
+{% set layout = navLayout|default('full') %}
+{% set contactHref = navContactHref|default('') %}
+
+<nav class="site-nav site-nav--layout-{{ layout }} site-nav--theme-{{ navTheme|default('black') }} site-nav--behavior-{{ navBehavior|default('static') }}" aria-label="Primary">
   {% if navBackHref is defined and navBackHref %}
     <a class="site-nav__link site-back-link" href="{{ navBackHref }}">
       <span class="site-back-link__icon" aria-hidden="true">
@@ -10,7 +13,25 @@
       <span class="site-back-link__label">back</span>
     </a>
   {% endif %}
-  {% if navLayout|default('full') not in ['home-only', 'fl-fullscreen'] %}
+  {% if layout == 'contact' %}
+    <a class="site-home-link site-nav__link" href="{{ siteUrl }}#home-reveal" aria-label="Home">FL</a>
+    {% if contactHref %}
+      <a
+        class="site-nav__link site-contact-toggle"
+        href="{{ contactHref }}"
+        aria-label="Send email"
+        title="Send email"
+      >
+        <span class="site-contact-toggle__frame" aria-hidden="true">
+          <svg class="site-contact-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7.5h16v9H4z" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1"/>
+            <path d="m4.5 8 7.5 6 7.5-6" fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"/>
+          </svg>
+        </span>
+      </a>
+    {% endif %}
+  {% else %}
+  {% if layout not in ['home-only', 'fl-fullscreen'] %}
     <a class="site-nav__link" href="/index">Index</a>
     <button class="site-nav__link site-nav__button site-panel-toggle" type="button" aria-expanded="false" aria-controls="site-info-panel">
       Info
@@ -20,7 +41,7 @@
     </a>
   {% endif %}
   <a class="site-home-link site-nav__link" href="{{ siteUrl }}#home-reveal" aria-label="Home">FL</a>
-  {% if navLayout|default('full') == 'fl-fullscreen' %}
+  {% if layout == 'fl-fullscreen' %}
     <button class="site-nav__button site-fullscreen-toggle" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
       <span class="site-fullscreen-toggle__frame" aria-hidden="true">
         <svg class="site-fullscreen-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -32,7 +53,7 @@
       </span>
     </button>
   {% endif %}
-  {% if navLayout|default('full') not in ['home-only', 'fl-fullscreen'] %}
+  {% if layout not in ['home-only', 'fl-fullscreen'] %}
   <a class="site-nav__link" href="/shop">Shop</a>
         <button class="site-nav__button site-fullscreen-toggle site-fullscreen-toggle--inline" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
         <span class="site-fullscreen-toggle__frame" aria-hidden="true">
@@ -53,6 +74,7 @@
         Privacy
       </button>
     </div>
+  {% endif %}
   {% endif %}
 </nav>
 

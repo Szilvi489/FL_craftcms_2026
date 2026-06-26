@@ -24,18 +24,20 @@
 {% set navLayout %}{% block navLayout %}full{% endblock %}{% endset %}
 {% set navBehavior %}{% block navBehavior %}static{% endblock %}{% endset %}
 {% set navBackHref %}{% block navBackHref %}{% endblock %}{% endset %}
+{% set navContactHref %}{% block navContactHref %}{% endblock %}{% endset %}
+{% set navContactToggleExpanded %}{% block navContactToggleExpanded %}false{% endblock %}{% endset %}
 <head>
     <meta charset="utf-8">
     <title>{% block title %}{{ siteName }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/base/variables.css">
+    <link rel="stylesheet" href="/css/base/variables.css?v=2">
     <link rel="stylesheet" href="/css/base/reset.css">
-    <link rel="stylesheet" href="/css/base/base.css?v=5">
+    <link rel="stylesheet" href="/css/base/base.css?v=6">
     <link rel="stylesheet" href="/css/base/typography.css">
-    <link rel="stylesheet" href="/css/nav/nav.css?v=28">
-    <link rel="stylesheet" href="/css/info/info.css?v=2">
-    <link rel="stylesheet" href="/css/contact/contact.css?v=2">
-    <link rel="stylesheet" href="/css/legal/legal.css?v=3">
+    <link rel="stylesheet" href="/css/nav/nav.css?v=30">
+    <link rel="stylesheet" href="/css/info/info.css?v=3">
+    <link rel="stylesheet" href="/css/contact/contact.css?v=13">
+    <link rel="stylesheet" href="/css/legal/legal.css?v=4">
     <link rel="stylesheet" href="/css/transition/transition.css?v=7">
     <link rel="stylesheet" href="/css/home/home.css?v=6">
     <link rel="stylesheet" href="/css/index/index.css?v=23">
@@ -58,7 +60,9 @@
         navLayout: navLayout|trim ?: 'full',
         navTheme: navTheme|trim ?: 'black',
         navBehavior: navBehavior|trim ?: 'static',
-        navBackHref: navBackHref|trim
+        navBackHref: navBackHref|trim,
+        navContactHref: navContactHref|trim,
+        navContactToggleExpanded: navContactToggleExpanded|trim == 'true'
       } %}
 
       <main class="site-main">
@@ -76,6 +80,6 @@
     <script src="/js/vendor/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
     {% block pageScripts %}{% endblock %}
-    <script type="module" src="/js/app.js?v=33"></script>
+    <script type="module" src="/js/app.js?v=46"></script>
 </body>
 </html>

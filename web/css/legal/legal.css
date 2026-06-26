@@ -10,7 +10,10 @@
   pointer-events: none;
   --site-home-panel-opacity: 1;
   transform: translateY(calc(100% + 1rem));
-  transition: transform 260ms ease, opacity 260ms ease, visibility 260ms ease;
+  transition:
+    transform var(--duration-slow) var(--easing-standard),
+    opacity var(--duration-base) ease,
+    visibility 0s linear var(--duration-base);
 }
 
 .site-imprint-panel__inner,
@@ -27,12 +30,19 @@
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+  transition:
+    transform var(--duration-slow) var(--easing-standard),
+    opacity var(--duration-base) ease,
+    visibility 0s linear 0s;
 }
 
 .site-imprint-panel.is-open.is-home-tracked-panel,
 .site-privacy-panel.is-open.is-home-tracked-panel {
   opacity: var(--site-home-panel-opacity, 1);
-  transition: transform 260ms ease, opacity 120ms linear, visibility 260ms ease;
+  transition:
+    transform var(--duration-slow) var(--easing-standard),
+    opacity var(--duration-fast) linear,
+    visibility 0s linear 0s;
 }
 
 .imprint-text p,

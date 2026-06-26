@@ -1,8 +1,9 @@
 import { initSiteUI } from "./scripts.js?v=10";
 import { initHomeHero } from "./home/homeHero.js?v=9";
-import { initIndexPage } from "./index/indexPage.js?v=3";
+import { initIndexPage } from "./index/indexPage.js?v=8";
 import { initProjectPage } from "./project/project.js?v=5";
 import { init404Gallery } from "./404/404Gallery.js?v=2";
+import { initContactPage } from "./contact/contactPage.js?v=5";
 import { initPageTransition } from "./transition/pageTransition.js?v=3";
 import { initCustomCursor } from "./customCursor.js?v=2";
 
@@ -10,6 +11,7 @@ const pageInitializers = {
   home: initHomeHero,
   index: initIndexPage,
   project: initProjectPage,
+  contact: initContactPage,
   "not-found": init404Gallery,
 };
 

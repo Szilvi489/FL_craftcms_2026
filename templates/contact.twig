@@ -15,13 +15,21 @@
 {% if not contactEntry %}
   {% set contactEntry = craft.entries().section('contactpage').site(currentSite).one() %}
 {% endif %}
+{% set contactEmail = contactEntry ? attribute(contactEntry, 'email') : null %}
+{% set contactFormStartsOpen = (submission is defined and submission) or craft.app.session.hasFlash('notice') or craft.app.session.hasFlash('error') %}
 
 {% block barbaNamespace %}contact{% endblock %}
+{% block bodyClass %}contact-page-view{% endblock %}
+{% block navLayout %}contact{% endblock %}
+{% block navBackHref %}{{ siteUrl }}#home-reveal{% endblock %}
+{% block navContactHref %}{{ contactEmail ? 'mailto:' ~ contactEmail : '' }}{% endblock %}
+{% block navContactToggleExpanded %}{{ contactFormStartsOpen ? 'true' : 'false' }}{% endblock %}
 {% block title %}{{ contactEntry and contactEntry.title ? contactEntry.title : 'Contact' }} - {{ siteName }}{% endblock %}
 
 {% block content %}
   {% include "_components/contact.twig" with {
     contactEntry: contactEntry,
-    contactSubmission: submission ?? null
+    contactSubmission: submission ?? null,
+    contactFormStartsOpen: contactFormStartsOpen
   } %}
 {% endblock %}
