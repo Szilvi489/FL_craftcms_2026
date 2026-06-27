@@ -103,6 +103,76 @@ fieldLayouts:
         name: 'Selected Work Cards Container'
         uid: 4ed63997-b0d9-451e-b1ab-10d575620535
         userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-06-27T17:59:05+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bce2d6b0-da34-407d-ba88-c57f37f812e3 # Single Image
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 92afaae3-47e1-44c5-ad39-0c1674be6049
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-06-27T17:59:05+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bce2d6b0-da34-407d-ba88-c57f37f812e3 # Single Image
+            handle: singleImage2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ab199b6f-046d-46b9-8a41-dc6e3088f363
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-06-27T17:59:05+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bce2d6b0-da34-407d-ba88-c57f37f812e3 # Single Image
+            handle: singleImage3
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5e893b68-946c-42da-9206-cc79cab345d9
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-06-27T17:59:05+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bce2d6b0-da34-407d-ba88-c57f37f812e3 # Single Image
+            handle: singleImage4
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 020efa5f-c31c-47a6-8f01-fe08ff1cb535
+            userCondition: null
+            warning: null
+            width: 100
+        name: WelcomeImages
+        uid: 3af20890-238f-472e-9813-7835f3457c46
+        userCondition: null
     thumbFieldKey: null
 handle: homepage
 hasTitleField: false

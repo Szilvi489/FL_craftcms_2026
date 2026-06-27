@@ -4,6 +4,10 @@
 {% set speed = attribute(card, 'multiImageSpeed') ?? null %}
 {% set meta = [attribute(card, 'client') ?? null, attribute(card, 'projectType') ?? null]|filter %}
 {% set linkedProject = null %}
+{% set cardImageSmall = { width: 640, quality: 68 } %}
+{% set cardImageMedium = { width: 960, quality: 70 } %}
+{% set cardImageLarge = { width: 1280, quality: 72 } %}
+{% set cardImageSizes = '(max-width: 767px) 88vw, (max-width: 1199px) 46vw, 30vw' %}
 
 {% if not attribute(card, 'isFieldEmpty', ['linkedProject'], 'method') %}
   {% set linkedProjectField = attribute(card, 'getFieldValue', ['linkedProject'], 'method') %}
@@ -39,9 +43,12 @@
             <img
               class="home-work-card__slide{% if loop.first %} is-active{% endif %}"
               data-home-card-frame
-              src="{{ asset.url }}"
+              src="{{ asset.getUrl(cardImageMedium) }}"
+              srcset="{{ asset.getUrl(cardImageSmall) }} 640w, {{ asset.getUrl(cardImageMedium) }} 960w, {{ asset.getUrl(cardImageLarge) }} 1280w"
+              sizes="{{ cardImageSizes }}"
               alt="{{ asset.title ?: card.title }}"
               loading="lazy"
+              decoding="async"
             >
           {% endfor %}
         </div>
@@ -53,13 +60,23 @@
           muted
           loop
           playsinline
-          preload="auto"
+          preload="metadata"
         ></video>
-      {% elseif media %}
+      {% elseif mediaType == 'gif' and media %}
         <img
           src="{{ media.url }}"
           alt="{{ media.title ?: card.title }}"
           loading="lazy"
+          decoding="async"
+        >
+      {% elseif media %}
+        <img
+          src="{{ media.getUrl(cardImageMedium) }}"
+          srcset="{{ media.getUrl(cardImageSmall) }} 640w, {{ media.getUrl(cardImageMedium) }} 960w, {{ media.getUrl(cardImageLarge) }} 1280w"
+          sizes="{{ cardImageSizes }}"
+          alt="{{ media.title ?: card.title }}"
+          loading="lazy"
+          decoding="async"
         >
       {% endif %}
     </div>

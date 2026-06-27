@@ -22,6 +22,9 @@
 
 {% block content %}
 {% set homeMedia = homeEntry ? homeEntry.indexImage.one() : null %}
+{% set homeHeroImageSmall = { width: 900, quality: 72 } %}
+{% set homeHeroImageMedium = { width: 1600, quality: 72 } %}
+{% set homeHeroImageLarge = { width: 2200, quality: 74 } %}
 {% set workColumnsField = homeEntry ? attribute(homeEntry, 'selectedWorkCardColumnContainerField') : null %}
 {% set workColumns = workColumnsField ? workColumnsField.all() : [] %}
 {% set workColumnCount = workColumns|length < 3 ? 3 : (workColumns|length > 5 ? 5 : workColumns|length) %}
@@ -42,14 +45,17 @@
           muted
           loop
           playsinline
-          preload="auto"
+          preload="metadata"
         ></video>
       {% else %}
         <img
-          src="{{ homeMedia.url }}"
+          src="{{ homeMedia.getUrl(homeHeroImageMedium) }}"
+          srcset="{{ homeMedia.getUrl(homeHeroImageSmall) }} 900w, {{ homeMedia.getUrl(homeHeroImageMedium) }} 1600w, {{ homeMedia.getUrl(homeHeroImageLarge) }} 2200w"
+          sizes="100vw"
           alt="{{ homeMedia.title ?: siteName }}"
           loading="eager"
           fetchpriority="high"
+          decoding="async"
         >
       {% endif %}
     </div>
@@ -59,7 +65,12 @@
     class="home-hero__cover"
     aria-hidden="true"
   >
-    <div class="home-hero__hole"></div>
+    <div class="home-hero__hole">
+      <span class="home-hero__hole-mask home-hero__hole-mask--top"></span>
+      <span class="home-hero__hole-mask home-hero__hole-mask--right"></span>
+      <span class="home-hero__hole-mask home-hero__hole-mask--bottom"></span>
+      <span class="home-hero__hole-mask home-hero__hole-mask--left"></span>
+    </div>
   </div>
 
   <div class="intro-title">

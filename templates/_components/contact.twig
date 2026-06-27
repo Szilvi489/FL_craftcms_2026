@@ -4,6 +4,9 @@
 {% set heroMedia = contactEntry and attribute(contactEntry, 'heroImage') ? attribute(contactEntry, 'heroImage').one() : null %}
 {% set fallbackMedia = contactEntry and attribute(contactEntry, 'initialBackgroundMedia') ? attribute(contactEntry, 'initialBackgroundMedia').one() : null %}
 {% set backgroundMedia = heroMedia ?: fallbackMedia %}
+{% set contactImageSmall = { width: 900, quality: 72 } %}
+{% set contactImageMedium = { width: 1600, quality: 72 } %}
+{% set contactImageLarge = { width: 2200, quality: 74 } %}
 {% set instaUrl = instaLink ? attribute(instaLink, 'getUrl', [], 'method') : null %}
 {% set instaLabel = instaLink ? (attribute(instaLink, 'getLabel', [true], 'method') ?: 'Instagram') : 'Instagram' %}
 {% set messageValues = contactSubmission and contactSubmission.message is iterable ? contactSubmission.message : {} %}
@@ -24,15 +27,18 @@
           muted
           loop
           playsinline
-          preload="auto"
+          preload="metadata"
         ></video>
       {% else %}
         <img
           class="contact-page__background-media"
-          src="{{ backgroundMedia.url }}"
+          src="{{ backgroundMedia.getUrl(contactImageMedium) }}"
+          srcset="{{ backgroundMedia.getUrl(contactImageSmall) }} 900w, {{ backgroundMedia.getUrl(contactImageMedium) }} 1600w, {{ backgroundMedia.getUrl(contactImageLarge) }} 2200w"
+          sizes="100vw"
           alt=""
           loading="eager"
           fetchpriority="high"
+          decoding="async"
         >
       {% endif %}
     </div>

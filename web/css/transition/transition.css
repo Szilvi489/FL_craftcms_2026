@@ -18,9 +18,48 @@
   left: var(--page-transition-hole-left, 55vw);
   width: var(--page-transition-hole-size, 18vw);
   aspect-ratio: 1;
-  overflow: hidden;
+  overflow: visible;
   background: transparent;
-  box-shadow: 0 0 0 100vmax #ffffff;
   transform-origin: center center;
+  transform: translateZ(0);
   will-change: transform;
+  backface-visibility: hidden;
+  isolation: isolate;
+}
+
+.page-transition__mask {
+  position: absolute;
+  display: block;
+  background: #ffffff;
+  pointer-events: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.page-transition__mask--top {
+  top: -220vmax;
+  left: -220vmax;
+  width: calc(100% + 440vmax);
+  height: calc(220vmax + 1px);
+}
+
+.page-transition__mask--right {
+  top: -1px;
+  left: 100%;
+  width: 220vmax;
+  height: calc(100% + 2px);
+}
+
+.page-transition__mask--bottom {
+  top: calc(100% - 1px);
+  left: -220vmax;
+  width: calc(100% + 440vmax);
+  height: calc(220vmax + 1px);
+}
+
+.page-transition__mask--left {
+  top: -1px;
+  left: -220vmax;
+  width: 220vmax;
+  height: calc(100% + 2px);
 }

@@ -6,6 +6,9 @@
 
 {% block content %}
 {% set heroMedia = entry.heroImage.one() %}
+{% set projectHeroImageSmall = { width: 900, quality: 72 } %}
+{% set projectHeroImageMedium = { width: 1600, quality: 72 } %}
+{% set projectHeroImageLarge = { width: 2200, quality: 74 } %}
 <article class="project">
   <header class="project-intro{% if heroMedia %} project-intro--has-background{% endif %}" aria-label="Project introduction" {% if entry.heroImage %} data-default-preview-key="hero-image"{% endif %}>
     {% if heroMedia %}
@@ -18,10 +21,18 @@
               muted
               loop
               playsinline
-              preload="auto"
+              preload="metadata"
             ></video>
           {% else %}
-            <img src="{{ heroMedia.url }}" alt="">
+            <img
+              src="{{ heroMedia.getUrl(projectHeroImageMedium) }}"
+              srcset="{{ heroMedia.getUrl(projectHeroImageSmall) }} 900w, {{ heroMedia.getUrl(projectHeroImageMedium) }} 1600w, {{ heroMedia.getUrl(projectHeroImageLarge) }} 2200w"
+              sizes="100vw"
+              alt=""
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            >
           {% endif %}
         </div>
       </div>
@@ -65,6 +76,22 @@
         {% set media = block.blockImage.one() %}
         {% set size = block.imageSize.value ?? block.imageSize ?? 'medium' %}
         {% set placement = block.imagePlacement.value ?? block.imagePlacement ?? 'center' %}
+        {% if size == 'small' %}
+          {% set blockImageSmall = { width: 600, quality: 68 } %}
+          {% set blockImageMedium = { width: 900, quality: 70 } %}
+          {% set blockImageLarge = { width: 1200, quality: 72 } %}
+          {% set blockImageSizes = '(max-width: 767px) 92vw, 33vw' %}
+        {% elseif size == 'medium' %}
+          {% set blockImageSmall = { width: 800, quality: 70 } %}
+          {% set blockImageMedium = { width: 1200, quality: 72 } %}
+          {% set blockImageLarge = { width: 1600, quality: 74 } %}
+          {% set blockImageSizes = '(max-width: 767px) 92vw, 50vw' %}
+        {% else %}
+          {% set blockImageSmall = { width: 1000, quality: 72 } %}
+          {% set blockImageMedium = { width: 1600, quality: 74 } %}
+          {% set blockImageLarge = { width: 2200, quality: 74 } %}
+          {% set blockImageSizes = '100vw' %}
+        {% endif %}
 
         {% if media %}
           <figure class="image-block image-block--{{ size }} image-block--{{ placement }}">
@@ -75,11 +102,18 @@
                 muted
                 loop
                 playsinline
-                preload="auto"
+                preload="metadata"
                 aria-label="{{ block.caption ?: entry.title }}"
               ></video>
             {% else %}
-              <img src="{{ media.url }}" alt="{{ media.alt ?: block.caption ?: entry.title }}" loading="lazy">
+              <img
+                src="{{ media.getUrl(blockImageMedium) }}"
+                srcset="{{ media.getUrl(blockImageSmall) }} {{ blockImageSmall.width }}w, {{ media.getUrl(blockImageMedium) }} {{ blockImageMedium.width }}w, {{ media.getUrl(blockImageLarge) }} {{ blockImageLarge.width }}w"
+                sizes="{{ blockImageSizes }}"
+                alt="{{ media.alt ?: block.caption ?: entry.title }}"
+                loading="lazy"
+                decoding="async"
+              >
             {% endif %}
             {% if block.caption %}
               <figcaption>{{ block.caption|nl2br }}</figcaption>

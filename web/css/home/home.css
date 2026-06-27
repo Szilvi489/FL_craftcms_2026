@@ -52,9 +52,49 @@ body.home-nav-revealed .site-nav--behavior-home-reveal {
   width: var(--home-cover-hole-size, 18vw);
   aspect-ratio: 1;
   background: transparent;
-  box-shadow: 0 0 0 100vmax #ffffff;
+  overflow: visible;
   transform-origin: center center;
+  transform: translateZ(0);
   will-change: transform;
+  backface-visibility: hidden;
+  isolation: isolate;
+}
+
+.home-hero__hole-mask {
+  position: absolute;
+  display: block;
+  background: var(--color-bg);
+  pointer-events: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.home-hero__hole-mask--top {
+  top: -220vmax;
+  left: -220vmax;
+  width: calc(100% + 440vmax);
+  height: calc(220vmax + 1px);
+}
+
+.home-hero__hole-mask--right {
+  top: -1px;
+  left: 100%;
+  width: 220vmax;
+  height: calc(100% + 2px);
+}
+
+.home-hero__hole-mask--bottom {
+  top: calc(100% - 1px);
+  left: -220vmax;
+  width: calc(100% + 440vmax);
+  height: calc(220vmax + 1px);
+}
+
+.home-hero__hole-mask--left {
+  top: -1px;
+  left: -220vmax;
+  width: 220vmax;
+  height: calc(100% + 2px);
 }
 
 .intro-title {
